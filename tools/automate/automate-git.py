@@ -497,6 +497,8 @@ def get_build_directory_name(is_debug):
       build_dir += 'GN_x64'
     elif options.armbuild:
       build_dir += 'GN_arm'
+    elif options.arm64build:
+      build_dir_suffix = '_GN_arm64'
     else:
       build_dir += 'GN_x86'
   else:
@@ -817,6 +819,9 @@ parser.add_option(
     dest='armbuild',
     default=False,
     help='Create an ARM build.')
+parser.add_option('--arm64-build',
+                  action='store_true', dest='arm64build', default=False,
+                  help='Create an ARM64 build.')
 
 # Test-related options.
 parser.add_option(
@@ -959,7 +964,7 @@ if (options.noreleasebuild and \
   parser.print_help(sys.stderr)
   sys.exit()
 
-if options.x64build and options.armbuild:
+if options.x64build + options.armbuild + options.arm64build > 1:
   print 'Invalid combination of options.'
   parser.print_help(sys.stderr)
   sys.exit()
@@ -1031,6 +1036,9 @@ branch_is_3029_or_older = (cef_branch != 'trunk' and int(cef_branch) <= 3029)
 # True if the requested branch is newer than 3497.
 branch_is_newer_than_3497 = (cef_branch == 'trunk' or int(cef_branch) > 3497)
 
+# True if the requested branch is newer than 2840.
+branch_is_newer_than_2840 = (cef_branch == 'trunk' or int(cef_branch) > 2840)
+
 # Enable GN by default for branches newer than 2785.
 if branch_is_newer_than_2785 and not 'CEF_USE_GN' in os.environ.keys():
   os.environ['CEF_USE_GN'] = '1'
@@ -1049,6 +1057,15 @@ if use_gn:
 
     if not branch_is_newer_than_2785:
       print 'The ARM build option is not supported with branch 2785 and older.'
+      sys.exit()
+
+  if options.armbuild or options.arm64build:
+    if platform != 'linux':
+      print 'The ARM64 build option is only supported on Linux.'
+      sys.exit()
+
+    if not branch_is_newer_than_2840:
+      print 'The ARM64 build option is not supported with branch 2840 and older.'
       sys.exit()
 else:
   if options.armbuild:
@@ -1642,6 +1659,8 @@ if not options.nodistrib and (chromium_checkout_changed or \
       path = path + ' --x64-build'
     elif options.armbuild:
       path = path + ' --arm-build'
+    elif options.arm64build:
+      path = path + ' --arm64-build'
 
     if type == 'minimal':
       path = path + ' --minimal'

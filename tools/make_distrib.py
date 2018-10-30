@@ -389,6 +389,9 @@ parser.add_option(
     dest='armbuild',
     default=False,
     help='create an ARM binary distribution (Linux only)')
+parser.add_option('--arm64-build',
+                  action='store_true', dest='arm64build', default=False,
+                  help='create an ARM64 binary distribution')
 parser.add_option(
     '--minimal',
     action='store_true',
@@ -435,13 +438,13 @@ if options.minimal and options.client:
   parser.print_help(sys.stderr)
   sys.exit()
 
-if options.x64build and options.armbuild:
-  print 'Cannot specify both --x64-build and --arm-build'
+if options.x64build + options.armbuild + options.arm64build > 1:
+  print 'Invalid combination of options.'
   parser.print_help(sys.stderr)
   sys.exit()
 
-if options.armbuild and platform != 'linux':
-  print '--arm-build is only supported on Linux.'
+if (options.armbuild or options.arm64build) and platform != 'linux':
+  print 'ARM build is only supported on Linux.'
   sys.exit()
 
 if options.sandbox and platform != 'windows':
@@ -494,6 +497,8 @@ if options.x64build:
   platform_arch = '64'
 elif options.armbuild:
   platform_arch = 'arm'
+elif options.arm64build:
+  platform_arch = 'arm64'
 else:
   platform_arch = '32'
 
@@ -539,6 +544,8 @@ if options.x64build:
   build_dir_suffix = '_GN_x64'
 elif options.armbuild:
   build_dir_suffix = '_GN_arm'
+elif options.arm64build:
+  build_dir_suffix = '_GN_arm64'
 else:
   build_dir_suffix = '_GN_x86'
 
