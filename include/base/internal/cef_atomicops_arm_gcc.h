@@ -1,19 +1,20 @@
-// Copyright (c) 2013 Google Inc. All rights reserved.
+// Protocol Buffers - Google's data interchange format
+// Copyright 2012 Google Inc.  All rights reserved.
+// https://developers.google.com/protocol-buffers/
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
 //
-//    * Redistributions of source code must retain the above copyright
+//     * Redistributions of source code must retain the above copyright
 // notice, this list of conditions and the following disclaimer.
-//    * Redistributions in binary form must reproduce the above
+//     * Redistributions in binary form must reproduce the above
 // copyright notice, this list of conditions and the following disclaimer
 // in the documentation and/or other materials provided with the
 // distribution.
-//    * Neither the name of Google Inc. nor the name Chromium Embedded
-// Framework nor the names of its contributors may be used to endorse
-// or promote products derived from this software without specific prior
-// written permission.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
 //
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -26,300 +27,203 @@
 // THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-// Do not include this header file directly. Use base/cef_atomicops.h
-// instead.
-//
-// LinuxKernelCmpxchg and Barrier_AtomicIncrement are from Google Gears.
 
-#ifndef CEF_INCLUDE_BASE_INTERNAL_CEF_ATOMICOPS_ARM_GCC_H_
-#define CEF_INCLUDE_BASE_INTERNAL_CEF_ATOMICOPS_ARM_GCC_H_
+// This file is an internal atomic implementation, use atomicops.h instead.
 
-#if defined(OS_QNX)
-#include <sys/cpuinline.h>
-#endif
+#ifndef GOOGLE_PROTOBUF_ATOMICOPS_INTERNALS_GENERIC_C11_ATOMIC_H_
+#define GOOGLE_PROTOBUF_ATOMICOPS_INTERNALS_GENERIC_C11_ATOMIC_H_
+
+#include <atomic>
 
 namespace base {
 namespace subtle {
 
-// Memory barriers on ARM are funky, but the kernel is here to help:
+// This implementation is transitional and maintains the original API for
+// atomicops.h. This requires casting memory locations to the atomic types, and
+// assumes that the API and the C++11 implementation are layout-compatible,
+// which isn't true for all implementations or hardware platforms. The static
+// assertion should detect this issue, were it to fire then this header
+// shouldn't be used.
 //
-// * ARMv5 didn't support SMP, there is no memory barrier instruction at
-//   all on this architecture, or when targeting its machine code.
-//
-// * Some ARMv6 CPUs support SMP. A full memory barrier can be produced by
-//   writing a random value to a very specific coprocessor register.
-//
-// * On ARMv7, the "dmb" instruction is used to perform a full memory
-//   barrier (though writing to the co-processor will still work).
-//   However, on single core devices (e.g. Nexus One, or Nexus S),
-//   this instruction will take up to 200 ns, which is huge, even though
-//   it's completely un-needed on these devices.
-//
-// * There is no easy way to determine at runtime if the device is
-//   single or multi-core. However, the kernel provides a useful helper
-//   function at a fixed memory address (0xffff0fa0), which will always
-//   perform a memory barrier in the most efficient way. I.e. on single
-//   core devices, this is an empty function that exits immediately.
-//   On multi-core devices, it implements a full memory barrier.
-//
-// * This source could be compiled to ARMv5 machine code that runs on a
-//   multi-core ARMv6 or ARMv7 device. In this case, memory barriers
-//   are needed for correct execution. Always call the kernel helper, even
-//   when targeting ARMv5TE.
-//
+// TODO(jfb) If this header manages to stay committed then the API should be
+//           modified, and all call sites updated.
+typedef volatile std::atomic<Atomic32>* AtomicLocation32;
+static_assert(sizeof(*(AtomicLocation32) nullptr) == sizeof(Atomic32),
+              "incompatible 32-bit atomic layout");
 
-inline void MemoryBarrier() {
-#if defined(OS_LINUX) || defined(OS_ANDROID)
-  // Note: This is a function call, which is also an implicit compiler barrier.
-  typedef void (*KernelMemoryBarrierFunc)();
-  ((KernelMemoryBarrierFunc)0xffff0fa0)();
-#elif defined(OS_QNX)
-  __cpu_membarrier();
+inline void MemoryBarrierInternal() {
+#if defined(__GLIBCXX__)
+  // Work around libstdc++ bug 51038 where atomic_thread_fence was declared but
+  // not defined, leading to the linker complaining about undefined references.
+  __atomic_thread_fence(std::memory_order_seq_cst);
 #else
-#error MemoryBarrier() is not implemented on this platform.
+  std::atomic_thread_fence(std::memory_order_seq_cst);
 #endif
 }
-
-// An ARM toolchain would only define one of these depending on which
-// variant of the target architecture is being used. This tests against
-// any known ARMv6 or ARMv7 variant, where it is possible to directly
-// use ldrex/strex instructions to implement fast atomic operations.
-#if defined(__ARM_ARCH_7__) || defined(__ARM_ARCH_7A__) ||  \
-    defined(__ARM_ARCH_7R__) || defined(__ARM_ARCH_7M__) || \
-    defined(__ARM_ARCH_6__) || defined(__ARM_ARCH_6J__) ||  \
-    defined(__ARM_ARCH_6K__) || defined(__ARM_ARCH_6Z__) || \
-    defined(__ARM_ARCH_6ZK__) || defined(__ARM_ARCH_6T2__)
 
 inline Atomic32 NoBarrier_CompareAndSwap(volatile Atomic32* ptr,
                                          Atomic32 old_value,
                                          Atomic32 new_value) {
-  Atomic32 prev_value;
-  int reloop;
-  do {
-    // The following is equivalent to:
-    //
-    //   prev_value = LDREX(ptr)
-    //   reloop = 0
-    //   if (prev_value != old_value)
-    //      reloop = STREX(ptr, new_value)
-    __asm__ __volatile__(
-        "    ldrex %0, [%3]\n"
-        "    mov %1, #0\n"
-        "    cmp %0, %4\n"
-#ifdef __thumb2__
-        "    it eq\n"
-#endif
-        "    strexeq %1, %5, [%3]\n"
-        : "=&r"(prev_value), "=&r"(reloop), "+m"(*ptr)
-        : "r"(ptr), "r"(old_value), "r"(new_value)
-        : "cc", "memory");
-  } while (reloop != 0);
-  return prev_value;
+  ((AtomicLocation32)ptr)
+      ->compare_exchange_strong(old_value,
+                                new_value,
+                                std::memory_order_relaxed,
+                                std::memory_order_relaxed);
+  return old_value;
+}
+
+inline Atomic32 NoBarrier_AtomicExchange(volatile Atomic32* ptr,
+                                         Atomic32 new_value) {
+  return ((AtomicLocation32)ptr)
+      ->exchange(new_value, std::memory_order_relaxed);
+}
+
+inline Atomic32 NoBarrier_AtomicIncrement(volatile Atomic32* ptr,
+                                          Atomic32 increment) {
+  return increment +
+         ((AtomicLocation32)ptr)
+             ->fetch_add(increment, std::memory_order_relaxed);
+}
+
+inline Atomic32 Barrier_AtomicIncrement(volatile Atomic32* ptr,
+                                        Atomic32 increment) {
+  return increment + ((AtomicLocation32)ptr)->fetch_add(increment);
 }
 
 inline Atomic32 Acquire_CompareAndSwap(volatile Atomic32* ptr,
                                        Atomic32 old_value,
                                        Atomic32 new_value) {
-  Atomic32 result = NoBarrier_CompareAndSwap(ptr, old_value, new_value);
-  MemoryBarrier();
-  return result;
+  ((AtomicLocation32)ptr)
+      ->compare_exchange_strong(old_value,
+                                new_value,
+                                std::memory_order_acquire,
+                                std::memory_order_acquire);
+  return old_value;
 }
 
 inline Atomic32 Release_CompareAndSwap(volatile Atomic32* ptr,
                                        Atomic32 old_value,
                                        Atomic32 new_value) {
-  MemoryBarrier();
-  return NoBarrier_CompareAndSwap(ptr, old_value, new_value);
-}
-
-inline Atomic32 NoBarrier_AtomicIncrement(volatile Atomic32* ptr,
-                                          Atomic32 increment) {
-  Atomic32 value;
-  int reloop;
-  do {
-    // Equivalent to:
-    //
-    //  value = LDREX(ptr)
-    //  value += increment
-    //  reloop = STREX(ptr, value)
-    //
-    __asm__ __volatile__(
-        "    ldrex %0, [%3]\n"
-        "    add %0, %0, %4\n"
-        "    strex %1, %0, [%3]\n"
-        : "=&r"(value), "=&r"(reloop), "+m"(*ptr)
-        : "r"(ptr), "r"(increment)
-        : "cc", "memory");
-  } while (reloop);
-  return value;
-}
-
-inline Atomic32 Barrier_AtomicIncrement(volatile Atomic32* ptr,
-                                        Atomic32 increment) {
-  // TODO(digit): Investigate if it's possible to implement this with
-  // a single MemoryBarrier() operation between the LDREX and STREX.
-  // See http://crbug.com/246514
-  MemoryBarrier();
-  Atomic32 result = NoBarrier_AtomicIncrement(ptr, increment);
-  MemoryBarrier();
-  return result;
-}
-
-inline Atomic32 NoBarrier_AtomicExchange(volatile Atomic32* ptr,
-                                         Atomic32 new_value) {
-  Atomic32 old_value;
-  int reloop;
-  do {
-    // old_value = LDREX(ptr)
-    // reloop = STREX(ptr, new_value)
-    __asm__ __volatile__(
-        "   ldrex %0, [%3]\n"
-        "   strex %1, %4, [%3]\n"
-        : "=&r"(old_value), "=&r"(reloop), "+m"(*ptr)
-        : "r"(ptr), "r"(new_value)
-        : "cc", "memory");
-  } while (reloop != 0);
+  ((AtomicLocation32)ptr)
+      ->compare_exchange_strong(old_value,
+                                new_value,
+                                std::memory_order_release,
+                                std::memory_order_relaxed);
   return old_value;
 }
-
-// This tests against any known ARMv5 variant.
-#elif defined(__ARM_ARCH_5__) || defined(__ARM_ARCH_5T__) || \
-    defined(__ARM_ARCH_5TE__) || defined(__ARM_ARCH_5TEJ__)
-
-// The kernel also provides a helper function to perform an atomic
-// compare-and-swap operation at the hard-wired address 0xffff0fc0.
-// On ARMv5, this is implemented by a special code path that the kernel
-// detects and treats specially when thread pre-emption happens.
-// On ARMv6 and higher, it uses LDREX/STREX instructions instead.
-//
-// Note that this always perform a full memory barrier, there is no
-// need to add calls MemoryBarrier() before or after it. It also
-// returns 0 on success, and 1 on exit.
-//
-// Available and reliable since Linux 2.6.24. Both Android and ChromeOS
-// use newer kernel revisions, so this should not be a concern.
-namespace {
-
-inline int LinuxKernelCmpxchg(Atomic32 old_value,
-                              Atomic32 new_value,
-                              volatile Atomic32* ptr) {
-  typedef int (*KernelCmpxchgFunc)(Atomic32, Atomic32, volatile Atomic32*);
-  return ((KernelCmpxchgFunc)0xffff0fc0)(old_value, new_value, ptr);
-}
-
-}  // namespace
-
-inline Atomic32 NoBarrier_CompareAndSwap(volatile Atomic32* ptr,
-                                         Atomic32 old_value,
-                                         Atomic32 new_value) {
-  Atomic32 prev_value;
-  for (;;) {
-    prev_value = *ptr;
-    if (prev_value != old_value)
-      return prev_value;
-    if (!LinuxKernelCmpxchg(old_value, new_value, ptr))
-      return old_value;
-  }
-}
-
-inline Atomic32 NoBarrier_AtomicExchange(volatile Atomic32* ptr,
-                                         Atomic32 new_value) {
-  Atomic32 old_value;
-  do {
-    old_value = *ptr;
-  } while (LinuxKernelCmpxchg(old_value, new_value, ptr));
-  return old_value;
-}
-
-inline Atomic32 NoBarrier_AtomicIncrement(volatile Atomic32* ptr,
-                                          Atomic32 increment) {
-  return Barrier_AtomicIncrement(ptr, increment);
-}
-
-inline Atomic32 Barrier_AtomicIncrement(volatile Atomic32* ptr,
-                                        Atomic32 increment) {
-  for (;;) {
-    // Atomic exchange the old value with an incremented one.
-    Atomic32 old_value = *ptr;
-    Atomic32 new_value = old_value + increment;
-    if (!LinuxKernelCmpxchg(old_value, new_value, ptr)) {
-      // The exchange took place as expected.
-      return new_value;
-    }
-    // Otherwise, *ptr changed mid-loop and we need to retry.
-  }
-}
-
-inline Atomic32 Acquire_CompareAndSwap(volatile Atomic32* ptr,
-                                       Atomic32 old_value,
-                                       Atomic32 new_value) {
-  Atomic32 prev_value;
-  for (;;) {
-    prev_value = *ptr;
-    if (prev_value != old_value) {
-      // Always ensure acquire semantics.
-      MemoryBarrier();
-      return prev_value;
-    }
-    if (!LinuxKernelCmpxchg(old_value, new_value, ptr))
-      return old_value;
-  }
-}
-
-inline Atomic32 Release_CompareAndSwap(volatile Atomic32* ptr,
-                                       Atomic32 old_value,
-                                       Atomic32 new_value) {
-  // This could be implemented as:
-  //    MemoryBarrier();
-  //    return NoBarrier_CompareAndSwap();
-  //
-  // But would use 3 barriers per succesful CAS. To save performance,
-  // use Acquire_CompareAndSwap(). Its implementation guarantees that:
-  // - A succesful swap uses only 2 barriers (in the kernel helper).
-  // - An early return due to (prev_value != old_value) performs
-  //   a memory barrier with no store, which is equivalent to the
-  //   generic implementation above.
-  return Acquire_CompareAndSwap(ptr, old_value, new_value);
-}
-
-#else
-#error "Your CPU's ARM architecture is not supported yet"
-#endif
-
-// NOTE: Atomicity of the following load and store operations is only
-// guaranteed in case of 32-bit alignement of |ptr| values.
 
 inline void NoBarrier_Store(volatile Atomic32* ptr, Atomic32 value) {
-  *ptr = value;
+  ((AtomicLocation32)ptr)->store(value, std::memory_order_relaxed);
 }
 
 inline void Acquire_Store(volatile Atomic32* ptr, Atomic32 value) {
-  *ptr = value;
-  MemoryBarrier();
+  ((AtomicLocation32)ptr)->store(value, std::memory_order_relaxed);
+  MemoryBarrierInternal();
 }
 
 inline void Release_Store(volatile Atomic32* ptr, Atomic32 value) {
-  MemoryBarrier();
-  *ptr = value;
+  ((AtomicLocation32)ptr)->store(value, std::memory_order_release);
 }
 
 inline Atomic32 NoBarrier_Load(volatile const Atomic32* ptr) {
-  return *ptr;
+  return ((AtomicLocation32)ptr)->load(std::memory_order_relaxed);
 }
 
 inline Atomic32 Acquire_Load(volatile const Atomic32* ptr) {
-  Atomic32 value = *ptr;
-  MemoryBarrier();
-  return value;
+  return ((AtomicLocation32)ptr)->load(std::memory_order_acquire);
 }
 
 inline Atomic32 Release_Load(volatile const Atomic32* ptr) {
-  MemoryBarrier();
-  return *ptr;
+  MemoryBarrierInternal();
+  return ((AtomicLocation32)ptr)->load(std::memory_order_relaxed);
 }
 
-}  // namespace base::subtle
-}  // namespace base
+#if defined(GOOGLE_PROTOBUF_ARCH_64_BIT)
 
-#endif  // CEF_INCLUDE_BASE_INTERNAL_CEF_ATOMICOPS_ARM_GCC_H_
+typedef volatile std::atomic<Atomic64>* AtomicLocation64;
+static_assert(sizeof(*(AtomicLocation64) nullptr) == sizeof(Atomic64),
+              "incompatible 64-bit atomic layout");
+
+inline Atomic64 NoBarrier_CompareAndSwap(volatile Atomic64* ptr,
+                                         Atomic64 old_value,
+                                         Atomic64 new_value) {
+  ((AtomicLocation64)ptr)
+      ->compare_exchange_strong(old_value,
+                                new_value,
+                                std::memory_order_relaxed,
+                                std::memory_order_relaxed);
+  return old_value;
+}
+
+inline Atomic64 NoBarrier_AtomicExchange(volatile Atomic64* ptr,
+                                         Atomic64 new_value) {
+  return ((AtomicLocation64)ptr)
+      ->exchange(new_value, std::memory_order_relaxed);
+}
+
+inline Atomic64 NoBarrier_AtomicIncrement(volatile Atomic64* ptr,
+                                          Atomic64 increment) {
+  return increment +
+         ((AtomicLocation64)ptr)
+             ->fetch_add(increment, std::memory_order_relaxed);
+}
+
+inline Atomic64 Barrier_AtomicIncrement(volatile Atomic64* ptr,
+                                        Atomic64 increment) {
+  return increment + ((AtomicLocation64)ptr)->fetch_add(increment);
+}
+
+inline Atomic64 Acquire_CompareAndSwap(volatile Atomic64* ptr,
+                                       Atomic64 old_value,
+                                       Atomic64 new_value) {
+  ((AtomicLocation64)ptr)
+      ->compare_exchange_strong(old_value,
+                                new_value,
+                                std::memory_order_acquire,
+                                std::memory_order_acquire);
+  return old_value;
+}
+
+inline Atomic64 Release_CompareAndSwap(volatile Atomic64* ptr,
+                                       Atomic64 old_value,
+                                       Atomic64 new_value) {
+  ((AtomicLocation64)ptr)
+      ->compare_exchange_strong(old_value,
+                                new_value,
+                                std::memory_order_release,
+                                std::memory_order_relaxed);
+  return old_value;
+}
+
+inline void NoBarrier_Store(volatile Atomic64* ptr, Atomic64 value) {
+  ((AtomicLocation64)ptr)->store(value, std::memory_order_relaxed);
+}
+
+inline void Acquire_Store(volatile Atomic64* ptr, Atomic64 value) {
+  ((AtomicLocation64)ptr)->store(value, std::memory_order_relaxed);
+  MemoryBarrierInternal();
+}
+
+inline void Release_Store(volatile Atomic64* ptr, Atomic64 value) {
+  ((AtomicLocation64)ptr)->store(value, std::memory_order_release);
+}
+
+inline Atomic64 NoBarrier_Load(volatile const Atomic64* ptr) {
+  return ((AtomicLocation64)ptr)->load(std::memory_order_relaxed);
+}
+
+inline Atomic64 Acquire_Load(volatile const Atomic64* ptr) {
+  return ((AtomicLocation64)ptr)->load(std::memory_order_acquire);
+}
+
+inline Atomic64 Release_Load(volatile const Atomic64* ptr) {
+  MemoryBarrierInternal();
+  return ((AtomicLocation64)ptr)->load(std::memory_order_relaxed);
+}
+
+#endif  // defined(GOOGLE_PROTOBUF_ARCH_64_BIT)
+
+}
+}
+
+#endif  // GOOGLE_PROTOBUF_ATOMICOPS_INTERNALS_GENERIC_C11_ATOMIC_H_
