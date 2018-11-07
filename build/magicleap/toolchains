@@ -8,13 +8,6 @@ SET(CMAKE_CXX_COMPILER clang++)
 set(CMAKE_SYSROOT /home/a/code/chromium_git/chromium/src/build/linux/debian_sid_arm64-sysroot)
 set(triple aarch64-linux-gnu)
 
-include_directories(/home/a/code/chromium_git/chromium/src/build/linux/debian_sid_arm64-sysroot/usr/include/aarch64-linux-gnu/)
-include_directories(/home/a/code/chromium_git/chromium/src/build/linux/debian_sid_arm64-sysroot/usr/include/c++/6/)
-include_directories(/home/a/code/chromium_git/chromium/src/build/linux/debian_sid_arm64-sysroot/usr/include/aarch64-linux-gnu/c++/6/)
-
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --target=aarch64-linux-gnu")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --target=aarch64-linux-gnu")
-
 # To build the tests, we need to set where the target environment containing
 # the required library is. On Debian-like systems, this is
 # /usr/aarch64-linux-gnu.
