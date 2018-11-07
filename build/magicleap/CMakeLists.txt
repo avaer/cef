@@ -24,12 +24,11 @@ set(CEF_TARGET libcef_dll_wrapper)
 # set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
 
 include_directories(..)
-include_directories(/home/a/code/chromium_git/chromium/src/build/linux/debian_sid_arm64-sysroot/usr/include/aarch64-linux-gnu/)
-include_directories(/home/a/code/chromium_git/chromium/src/build/linux/debian_sid_arm64-sysroot/usr/include/c++/6/)
-include_directories(/home/a/code/chromium_git/chromium/src/build/linux/debian_sid_arm64-sysroot/usr/include/aarch64-linux-gnu/c++/6/)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --target=aarch64-linux-gnu -fPIC")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --target=aarch64-linux-gnu -fPIC")
+set(CMAKE_CXX_STANDARD 14)
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
 # add_definitions(-DNOMINMAX -DDCHECK_ALWAYS_ON)
 
