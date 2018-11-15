@@ -1554,6 +1554,48 @@ if (is_mac) {
   }
 }
 
+static_library("libcef2") {
+    complete_static_lib = true
+    sources = gypi_paths2.includes_common +
+              gypi_paths.autogen_cpp_includes +
+              gypi_paths2.includes_capi +
+              gypi_paths.autogen_capi_includes +
+              gypi_paths2.libcef_sources_common +
+              gypi_paths.autogen_library_side
+
+    deps = [
+      ":libcef_static",
+    ]
+
+    if (is_win) {
+      sources += gypi_paths2.includes_win + [
+        "libcef_dll/libcef_dll.rc",
+      ]
+
+      # This is a large module that can't do incremental linking in some cases.
+      configs -= [ "//build/config/win:default_incremental_linking" ]
+      configs +=
+          [ "//build/config/win:default_large_module_incremental_linking" ]
+
+      deps += [
+        # Bring in ui_unscaled_resources.rc which contains custom cursors.
+        # TODO(cef): Remove this once custom cursors can be loaded via
+        # ResourceBundle. See crbug.com/147663.
+        "//ui/resources:ui_unscaled_resources_grd",
+      ]
+    }
+
+    if (is_linux && !is_debug && use_allocator=="none") {
+      # Only export necessary symbols from libcef.so.
+      # Don't do this in Debug builds because it causes the resulting
+      # application to crash.
+      # Also need to do this for ASAN builds to work around
+      # https://crbug.com/832808.
+      ldflags = [ "-Wl,--version-script=" +
+                  rebase_path("//cef/libcef_dll/libcef.lst") ]
+    }
+ }
+
 
 #
 # Executable/app targets.
