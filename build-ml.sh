@@ -8,8 +8,7 @@ lib=./out/Release_GN_arm64/obj/cef/libcef2.a
 rm -f $lib
 ninja -C out/Release_GN_arm64 libcef2 cefsimple
 
-lib=./out/Release_GN_arm64/obj/cef/libcef2.a
-ar -t $lib | xargs ar rvs $lib.new && mv -v $lib.new $lib
+lib=./out/Release_GN_arm64/obj/cef/libcef2.a; ar -t $lib | xargs ar rvs $lib.new && mv -v $lib.new $lib;
 
 # ar r ./out/Release_GN_arm64/obj/cef/libcef_static.a ./out/Release_GN_arm64/obj/base/base/lazy_instance_helpers.o
 # ar r ./out/Release_GN_arm64/obj/cef/libcef_static.a ./out/Release_GN_arm64/obj/base/base/ref_counted.o
