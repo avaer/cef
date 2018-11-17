@@ -8,15 +8,18 @@ lib=./out/Release_GN_arm64/obj/cef/libcef2.a
 rm -f $lib
 ninja -C out/Release_GN_arm64 libcef2 cefsimple
 
+# convert thin (reference-based) ar archive to full
 lib=./out/Release_GN_arm64/obj/cef/libcef2.a; ar -t $lib | xargs ar rvs $lib.new && mv -v $lib.new $lib;
 
 # ar r ./out/Release_GN_arm64/obj/cef/libcef_static.a ./out/Release_GN_arm64/obj/base/base/lazy_instance_helpers.o
 # ar r ./out/Release_GN_arm64/obj/cef/libcef_static.a ./out/Release_GN_arm64/obj/base/base/ref_counted.o
+
 aarch64-linux-gnu-objcopy --redefine-sym powf@GLIBC_2.17=powf ./obj/cef/libcef2.a
 aarch64-linux-gnu-objcopy --redefine-sym logf@GLIBC_2.17=powf ./obj/cef/libcef2.a
 aarch64-linux-gnu-objcopy --redefine-sym log2f@GLIBC_2.17=powf ./obj/cef/libcef2.a
 aarch64-linux-gnu-objcopy --redefine-sym expf@GLIBC_2.17=powf ./obj/cef/libcef2.a
 aarch64-linux-gnu-objcopy --redefine-sym exp2f@GLIBC_2.17=powf ./obj/cef/libcef2.a
+
 aarch64-linux-gnu-objcopy --prefix-symbols=libcef_ ./obj/cef/libcef2.a
 
 aarch64-linux-gnu-objcopy --redefine-syms=<(nm -go -fposix ./obj/cef/libcef2.a | grep -v ' U ' | grep -v ' ? ' | grep -v 'libcef_' | sed 's/^.*\[\(.*\)\]: \(.*\)/\1:\2/' |
@@ -37,3 +40,11 @@ do
   l2=$(basename $(readlink -f $(find ./build/linux/debian_sid_arm64-sysroot -name "$l")));
   patchelf --replace-needed "$l" "$l2" ./out/Release_GN_arm64/libcef.so
 done
+
+# reify symlinks
+ls=$(find -type l)
+for l in $ls; do   l2=$(readlink -e "$l"); rm "$l"; cp -R "$l2" "$l"; done
+
+# get recursive dependencies of shared object
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/build/linux/debian_sid_arm64-sysroot/usr/lib/aarch64-linux-gnu/:$(pwd)/build/linux/debian_sid_arm64-sysroot/lib/aarch64-linux-gnu
+lddtree -l ./out/Release_GN_arm64/libcef.so | xargs -n1 -i basename {}
