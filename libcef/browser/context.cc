@@ -161,6 +161,10 @@ bool GetColor(const cef_color_t cef_in, bool is_windowless, SkColor* sk_out) {
 
 }  // namespace
 
+namespace content {
+CONTENT_EXPORT int ContentMain(const ContentMainParams& params);
+}
+
 int CefExecuteProcess(const CefMainArgs& args,
                       CefRefPtr<CefApp> application,
                       void* windows_sandbox_info) {
@@ -213,8 +217,8 @@ int CefExecuteProcess(const CefMainArgs& args,
   return content::ContentMain(params);
 #else
   content::ContentMainParams params(&main_delegate);
-  params.argc = args.argc;
-  params.argv = const_cast<const char**>(args.argv);
+  /* params.argc = args.argc;
+  params.argv = const_cast<const char**>(args.argv); */
 
   return content::ContentMain(params);
 #endif
@@ -388,8 +392,8 @@ bool CefContext::Initialize(const CefMainArgs& args,
   params.sandbox_info =
       static_cast<sandbox::SandboxInterfaceInfo*>(windows_sandbox_info);
 #else
-  params.argc = args.argc;
-  params.argv = const_cast<const char**>(args.argv);
+  /* params.argc = args.argc;
+  params.argv = const_cast<const char**>(args.argv); */
 #endif
 
   sm_main_delegate_.reset(
@@ -401,6 +405,8 @@ bool CefContext::Initialize(const CefMainArgs& args,
   sm_main_params_->argc = params.argc;
   sm_main_params_->argv = params.argv;
 #endif
+
+  base::CommandLine::Init(args.argc, const_cast<const char * const *>(args.argv));
 
   exit_code = service_manager::MainInitialize(*sm_main_params_);
   DCHECK_LT(exit_code, 0);

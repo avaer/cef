@@ -800,7 +800,7 @@ void CefRenderWidgetHostViewOSR::InitAsGuest(
 
 void CefRenderWidgetHostViewOSR::UpdateCursor(
     const content::WebCursor& cursor) {
-  TRACE_EVENT0("libcef", "CefRenderWidgetHostViewOSR::UpdateCursor");
+  /* TRACE_EVENT0("libcef", "CefRenderWidgetHostViewOSR::UpdateCursor");
   if (!browser_impl_.get())
     return;
 
@@ -821,7 +821,7 @@ void CefRenderWidgetHostViewOSR::UpdateCursor(
     custom_cursor_info.buffer = cursor_info.custom_image.getPixels();
     custom_cursor_info.size.width = cursor_info.custom_image.width();
     custom_cursor_info.size.height = cursor_info.custom_image.height();
-  }
+  } */
 
 #if defined(USE_AURA)
   content::WebCursor web_cursor = cursor;

@@ -12,7 +12,7 @@
 #include "base/files/file_path.h"
 #include "chrome/common/plugin.mojom.h"
 #include "content/public/browser/resource_context.h"
-#include "extensions/browser/info_map.h"
+// #include "extensions/browser/info_map.h"
 #include "net/ssl/client_cert_store.h"
 #include "url/origin.h"
 
@@ -42,7 +42,7 @@ class CefResourceContext : public content::ResourceContext {
 
   std::unique_ptr<net::ClientCertStore> CreateClientCertStore();
 
-  void set_extensions_info_map(extensions::InfoMap* extensions_info_map);
+  // void set_extensions_info_map(extensions::InfoMap* extensions_info_map);
   void set_url_request_context_getter(CefURLRequestContextGetter* getter);
   void set_parent(CefResourceContext* parent);
 
@@ -65,9 +65,9 @@ class CefResourceContext : public content::ResourceContext {
 
   // State transferred from the BrowserContext for use on the IO thread.
   bool IsOffTheRecord() const { return is_off_the_record_; }
-  const extensions::InfoMap* GetExtensionInfoMap() const {
+  /* const extensions::InfoMap* GetExtensionInfoMap() const {
     return extension_info_map_.get();
-  }
+  } */
   CefRefPtr<CefRequestContextHandler> GetHandler() const { return handler_; }
 
  private:
@@ -80,7 +80,7 @@ class CefResourceContext : public content::ResourceContext {
 
   // Only accessed on the IO thread.
   bool is_off_the_record_;
-  scoped_refptr<extensions::InfoMap> extension_info_map_;
+  // scoped_refptr<extensions::InfoMap> extension_info_map_;
   CefRefPtr<CefRequestContextHandler> handler_;
 
   // Map (render_process_id, plugin_path, is_main_frame, main_frame_origin) to

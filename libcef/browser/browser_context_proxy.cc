@@ -39,14 +39,14 @@ bool ShouldProxyUserData(const void* key) {
   // If this value is not proxied then CefBrowserContextImpl::GetGuestManager()
   // returns NULL.
   // See also CefExtensionsAPIClient::CreateGuestViewManagerDelegate.
-  if (key == guest_view::kGuestViewManagerKeyName)
-    return true;
+  /* if (key == guest_view::kGuestViewManagerKeyName)
+    return true; */
 
   // If this value is not proxied then there will be a use-after-free while
   // destroying the FontFamilyCache because it will try to access the
   // ProxyService owned by CefBrowserContextImpl (which has already been freed).
-  if (key == kFontFamilyCacheKey)
-    return true;
+  /* if (key == kFontFamilyCacheKey)
+    return true; */
 
   // If this value is not proxied WebUI will fail to load.
   if (key == content::URLDataManager::GetUserDataKey())
@@ -114,11 +114,11 @@ base::FilePath CefBrowserContextProxy::GetPath() const {
   return parent_->GetPath();
 }
 
-std::unique_ptr<content::ZoomLevelDelegate>
+/* std::unique_ptr<content::ZoomLevelDelegate>
 CefBrowserContextProxy::CreateZoomLevelDelegate(
     const base::FilePath& partition_path) {
   return parent_->CreateZoomLevelDelegate(partition_path);
-}
+} */
 
 bool CefBrowserContextProxy::IsOffTheRecord() const {
   return parent_->IsOffTheRecord();

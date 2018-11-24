@@ -27,14 +27,15 @@ class Delegate : public InternalHandlerDelegate {
   bool OnRequest(CefRefPtr<CefBrowser> browser,
                  CefRefPtr<CefRequest> request,
                  Action* action) override {
-    GURL url = GURL(request->GetURL().ToString());
+    return false;
+    /* GURL url = GURL(request->GetURL().ToString());
     std::string path = url.path();
     if (path.length() > 0)
       path = path.substr(1);
 
     action->string_piece =
         content::DevToolsFrontendHost::GetFrontendResource(path);
-    return !action->string_piece.empty();
+    return !action->string_piece.empty(); */
   }
 };
 

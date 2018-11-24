@@ -50,7 +50,7 @@ void ChromeBrowserProcessStub::OnContextInitialized() {
   // Must be created after the NotificationService.
   print_job_manager_.reset(new printing::PrintJobManager());
   profile_manager_.reset(new ChromeProfileManagerStub());
-  event_router_forwarder_ = new extensions::EventRouterForwarder();
+  // event_router_forwarder_ = new extensions::EventRouterForwarder();
 
   context_initialized_ = true;
 }
@@ -68,7 +68,7 @@ void ChromeBrowserProcessStub::Shutdown() {
   print_job_manager_.reset(NULL);
 
   profile_manager_.reset();
-  event_router_forwarder_ = nullptr;
+  // event_router_forwarder_ = nullptr;
 
   shutdown_ = true;
 }
@@ -166,8 +166,9 @@ BrowserProcessPlatformPart* ChromeBrowserProcessStub::platform_part() {
 
 extensions::EventRouterForwarder*
 ChromeBrowserProcessStub::extension_event_router_forwarder() {
-  DCHECK(context_initialized_);
-  return event_router_forwarder_.get();
+  return nullptr;
+  /* DCHECK(context_initialized_);
+  return event_router_forwarder_.get(); */
 }
 
 NotificationUIManager* ChromeBrowserProcessStub::notification_ui_manager() {
@@ -296,7 +297,7 @@ ChromeBrowserProcessStub::optimization_guide_service() {
 }
 
 #if (defined(OS_WIN) || defined(OS_LINUX)) && !defined(OS_CHROMEOS)
-void ChromeBrowserProcessStub::StartAutoupdateTimer() {}
+// void ChromeBrowserProcessStub::StartAutoupdateTimer() {}
 #endif
 
 net_log::ChromeNetLog* ChromeBrowserProcessStub::net_log() {

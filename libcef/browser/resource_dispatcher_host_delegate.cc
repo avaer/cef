@@ -27,8 +27,8 @@
 #include "content/public/browser/stream_info.h"
 #include "content/public/common/webplugininfo.h"
 #include "extensions/common/constants.h"
-#include "extensions/common/extension.h"
-#include "extensions/common/manifest_handlers/mime_types_handler.h"
+// #include "extensions/common/extension.h"
+// #include "extensions/common/manifest_handlers/mime_types_handler.h"
 #include "net/http/http_response_headers.h"
 #include "net/url_request/url_request.h"
 
@@ -43,7 +43,8 @@ bool CefResourceDispatcherHostDelegate::ShouldInterceptResourceAsStream(
     const std::string& mime_type,
     GURL* origin,
     std::string* payload) {
-  if (!extensions::ExtensionsEnabled())
+  return false;
+  /* if (!extensions::ExtensionsEnabled())
     return false;
 
   const content::ResourceRequestInfo* info =
@@ -82,7 +83,7 @@ bool CefResourceDispatcherHostDelegate::ShouldInterceptResourceAsStream(
     }
   }
 
-  return false;
+  return false; */
 }
 
 // Implementation based on
@@ -90,7 +91,7 @@ bool CefResourceDispatcherHostDelegate::ShouldInterceptResourceAsStream(
 void CefResourceDispatcherHostDelegate::OnStreamCreated(
     net::URLRequest* request,
     std::unique_ptr<content::StreamInfo> stream) {
-  DCHECK(extensions::ExtensionsEnabled());
+  /* DCHECK(extensions::ExtensionsEnabled());
   const content::ResourceRequestInfo* info =
       content::ResourceRequestInfo::ForRequest(request);
   std::map<net::URLRequest*, StreamTargetInfo>::iterator ix =
@@ -104,8 +105,8 @@ void CefResourceDispatcherHostDelegate::OnStreamCreated(
           ix->second.extension_id, ix->second.view_id, embedded,
           info->GetFrameTreeNodeId(), info->GetChildID(),
           info->GetRenderFrameID(), std::move(stream),
-          nullptr /* transferrable_loader */, GURL()));
-  stream_target_info_.erase(request);
+          nullptr, GURL()));
+  stream_target_info_.erase(request); */
 }
 
 void CefResourceDispatcherHostDelegate::OnRequestRedirected(

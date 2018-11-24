@@ -41,10 +41,12 @@ typedef struct _XDisplay XDisplay;
 #include "include/internal/cef_export.h"
 #include "include/internal/cef_string.h"
 
+#include <android/native_window.h>
+
 // Handle types.
 #define cef_cursor_handle_t unsigned long
 #define cef_event_handle_t XEvent*
-#define cef_window_handle_t unsigned long
+#define cef_window_handle_t ANativeWindow*
 
 #define kNullCursorHandle 0
 #define kNullEventHandle NULL

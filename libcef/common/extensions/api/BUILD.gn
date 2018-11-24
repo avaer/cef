@@ -69,6 +69,6 @@ group("extensions_features") {
     ":cef_api_features",
     ":cef_manifest_features",
     ":cef_permission_features",
-    "//extensions/common/api:extensions_features",
+    # "//extensions/common/api:extensions_features",
   ]
 }

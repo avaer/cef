@@ -200,7 +200,7 @@ void CefPrintingMessageFilter::OnScriptedPrint(
 void CefPrintingMessageFilter::OnScriptedPrintReply(
     scoped_refptr<PrinterQuery> printer_query,
     IPC::Message* reply_msg) {
-  PrintMsg_PrintPages_Params params;
+  /* PrintMsg_PrintPages_Params params;
 #if defined(OS_ANDROID)
   // We need to save the routing ID here because Send method below deletes the
   // |reply_msg| before we can get the routing ID for the Android code.
@@ -230,7 +230,7 @@ void CefPrintingMessageFilter::OnScriptedPrintReply(
     queue_->QueuePrinterQuery(printer_query.get());
   } else {
     printer_query->StopWorker();
-  }
+  } */
 }
 
 void CefPrintingMessageFilter::OnUpdatePrintSettings(

@@ -9,7 +9,7 @@
 #include "libcef/common/cef_switches.h"
 #include "libcef/common/command_line_impl.h"
 #include "libcef/common/crash_reporting.h"
-#include "libcef/common/extensions/extensions_util.h"
+// #include "libcef/common/extensions/extensions_util.h"
 #include "libcef/renderer/content_renderer_client.h"
 #include "libcef/utility/content_utility_client.h"
 
@@ -36,7 +36,7 @@
 #include "content/public/common/content_features.h"
 #include "content/public/common/content_switches.h"
 #include "content/public/common/main_function_params.h"
-#include "extensions/common/constants.h"
+// #include "extensions/common/constants.h"
 #include "ipc/ipc_buildflags.h"
 #include "pdf/pdf_ppapi.h"
 #include "services/service_manager/sandbox/switches.h"
@@ -70,12 +70,16 @@
 #include "base/nix/xdg_util.h"
 #endif
 
+namespace content {
+void ContentMainDelegate::ZygoteStarting(std::vector<std::unique_ptr<service_manager::ZygoteForkDelegate>> *delegates) {}
+}
+
 namespace {
 
 const char* const kNonWildcardDomainNonPortSchemes[] = {
-    extensions::kExtensionScheme};
+    /* extensions::kExtensionScheme*/};
 const size_t kNonWildcardDomainNonPortSchemesSize =
-    arraysize(kNonWildcardDomainNonPortSchemes);
+    0; // arraysize(kNonWildcardDomainNonPortSchemes);
 
 #if defined(OS_MACOSX)
 
@@ -199,10 +203,11 @@ void OverridePepperFlashSystemPluginPath() {
 // ~/.config/google-chrome/ for official builds.
 // (This also helps us sidestep issues with other apps grabbing ~/.chromium .)
 bool GetDefaultUserDataDirectory(base::FilePath* result) {
-  std::unique_ptr<base::Environment> env(base::Environment::Create());
+  /* std::unique_ptr<base::Environment> env(base::Environment::Create());
   base::FilePath config_dir(base::nix::GetXDGDirectory(
       env.get(), base::nix::kXdgConfigHomeEnvVar, base::nix::kDotConfigDir));
-  *result = config_dir.Append(FILE_PATH_LITERAL("cef_user_data"));
+  *result = config_dir.Append(FILE_PATH_LITERAL("cef_user_data")); */
+  *result = base::FilePath("");
   return true;
 }
 
@@ -569,9 +574,9 @@ void CefMainDelegate::PreSandboxStartup() {
 }
 
 void CefMainDelegate::SandboxInitialized(const std::string& process_type) {
-  CefContentClient::SetPDFEntryFunctions(chrome_pdf::PPP_GetInterface,
+  /* CefContentClient::SetPDFEntryFunctions(chrome_pdf::PPP_GetInterface,
                                          chrome_pdf::PPP_InitializeModule,
-                                         chrome_pdf::PPP_ShutdownModule);
+                                         chrome_pdf::PPP_ShutdownModule); */
 }
 
 int CefMainDelegate::RunProcess(
@@ -615,11 +620,11 @@ void CefMainDelegate::ProcessExiting(const std::string& process_type) {
 
 #if defined(OS_LINUX)
 void CefMainDelegate::ZygoteForked() {
-  base::CommandLine* command_line = base::CommandLine::ForCurrentProcess();
+  /* base::CommandLine* command_line = base::CommandLine::ForCurrentProcess();
   const std::string& process_type =
       command_line->GetSwitchValueASCII(switches::kProcessType);
   // Initialize crash reporting state for the newly forked process.
-  crash_reporting::ZygoteForked(command_line, process_type);
+  crash_reporting::ZygoteForked(command_line, process_type); */
 }
 #endif
 
@@ -741,7 +746,7 @@ void CefMainDelegate::InitializeResourceBundle() {
       }
     }
 
-    if (extensions::ExtensionsEnabled() ||
+    /* if (extensions::ExtensionsEnabled() ||
         !command_line->HasSwitch(switches::kDisablePlugins)) {
       if (base::PathExists(cef_extensions_pak_file)) {
         resource_bundle.AddDataPackFromPath(cef_extensions_pak_file,
@@ -749,7 +754,7 @@ void CefMainDelegate::InitializeResourceBundle() {
       } else {
         LOG(ERROR) << "Could not load cef_extensions.pak";
       }
-    }
+    } */
 
     if (base::PathExists(devtools_pak_file)) {
       resource_bundle.AddDataPackFromPath(devtools_pak_file,

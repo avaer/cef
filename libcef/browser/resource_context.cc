@@ -80,7 +80,7 @@ CefResourceContext::CreateClientCertStore() {
   return std::unique_ptr<net::ClientCertStore>(new net::ClientCertStoreWin());
 #elif defined(OS_MACOSX)
   return std::unique_ptr<net::ClientCertStore>(new net::ClientCertStoreMac());
-#elif defined(USE_OPENSSL)
+#elif defined(USE_OPENSSL) || defined(OS_LINUX)
   // OpenSSL does not use the ClientCertStore infrastructure. On Android client
   // cert matching is done by the OS as part of the call to show the cert
   // selection dialog.
@@ -90,11 +90,11 @@ CefResourceContext::CreateClientCertStore() {
 #endif
 }
 
-void CefResourceContext::set_extensions_info_map(
+/* void CefResourceContext::set_extensions_info_map(
     extensions::InfoMap* extensions_info_map) {
   DCHECK(!extension_info_map_);
   extension_info_map_ = extensions_info_map;
-}
+} */
 
 void CefResourceContext::set_url_request_context_getter(
     CefURLRequestContextGetter* getter) {

@@ -9,7 +9,7 @@
 
 #include "base/callback_forward.h"
 #include "base/macros.h"
-#include "extensions/browser/extension_host.h"
+// #include "extensions/browser/extension_host.h"
 
 class CefBrowserHostImpl;
 

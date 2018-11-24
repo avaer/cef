@@ -24,14 +24,14 @@
 #include "libcef/common/cef_messages.h"
 #include "libcef/common/cef_switches.h"
 #include "libcef/common/content_client.h"
-#include "libcef/common/extensions/extensions_client.h"
-#include "libcef/common/extensions/extensions_util.h"
+// #include "libcef/common/extensions/extensions_client.h"
+// #include "libcef/common/extensions/extensions_util.h"
 #include "libcef/common/request_impl.h"
 #include "libcef/common/values_impl.h"
 #include "libcef/renderer/blink_glue.h"
 #include "libcef/renderer/browser_impl.h"
-#include "libcef/renderer/extensions/extensions_renderer_client.h"
-#include "libcef/renderer/extensions/print_render_frame_helper_delegate.h"
+// #include "libcef/renderer/extensions/extensions_renderer_client.h"
+// #include "libcef/renderer/extensions/print_render_frame_helper_delegate.h"
 #include "libcef/renderer/render_frame_observer.h"
 #include "libcef/renderer/render_message_filter.h"
 #include "libcef/renderer/render_thread_observer.h"
@@ -52,7 +52,7 @@
 #include "chrome/common/constants.mojom.h"
 #include "chrome/common/url_constants.h"
 #include "chrome/renderer/chrome_content_renderer_client.h"
-#include "chrome/renderer/loadtimes_extension_bindings.h"
+// #include "chrome/renderer/loadtimes_extension_bindings.h"
 #include "chrome/renderer/media/chrome_key_systems.h"
 #include "chrome/renderer/pepper/chrome_pdf_print_client.h"
 #include "chrome/renderer/pepper/pepper_helper.h"
@@ -77,8 +77,8 @@
 #include "content/public/renderer/render_view.h"
 #include "content/public/renderer/render_view_visitor.h"
 #include "content/renderer/render_widget.h"
-#include "extensions/common/switches.h"
-#include "extensions/renderer/renderer_extension_registry.h"
+// #include "extensions/common/switches.h"
+// #include "extensions/renderer/renderer_extension_registry.h"
 #include "ipc/ipc_sync_channel.h"
 #include "media/base/media.h"
 #include "printing/print_settings.h"
@@ -140,9 +140,10 @@ class CefPrerendererClient : public content::RenderViewObserver,
 };
 
 bool IsStandaloneExtensionProcess() {
-  return extensions::ExtensionsEnabled() &&
+  return false;
+  /* return extensions::ExtensionsEnabled() &&
          extensions::CefExtensionsRendererClient::
-             IsStandaloneExtensionProcess();
+             IsStandaloneExtensionProcess(); */
 }
 
 }  // namespace
@@ -165,7 +166,7 @@ CefContentRendererClient::CefContentRendererClient()
       devtools_agent_count_(0),
       uncaught_exception_stack_size_(0),
       single_process_cleanup_complete_(false) {
-  if (extensions::ExtensionsEnabled()) {
+  /* if (extensions::ExtensionsEnabled()) {
     extensions_client_.reset(new extensions::CefExtensionsClient);
     extensions::ExtensionsClient::Set(extensions_client_.get());
     extensions_renderer_client_.reset(
@@ -174,7 +175,7 @@ CefContentRendererClient::CefContentRendererClient()
         extensions_renderer_client_.get());
   }
 
-  printing::SetAgent(CefContentClient::Get()->GetUserAgent());
+  printing::SetAgent(CefContentClient::Get()->GetUserAgent()); */
 }
 
 CefContentRendererClient::~CefContentRendererClient() {}
@@ -406,13 +407,13 @@ void CefContentRendererClient::RenderThreadStarted() {
   }
 #endif  // defined(OS_MACOSX)
 
-  if (extensions::PdfExtensionEnabled()) {
+  /* if (extensions::PdfExtensionEnabled()) {
     pdf_print_client_.reset(new ChromePDFPrintClient());
     pdf::PepperPDFHost::SetPrintClient(pdf_print_client_.get());
   }
 
   if (extensions::ExtensionsEnabled())
-    extensions_renderer_client_->RenderThreadStarted();
+    extensions_renderer_client_->RenderThreadStarted(); */
 }
 
 void CefContentRendererClient::RenderThreadConnected() {
@@ -439,14 +440,14 @@ void CefContentRendererClient::RenderThreadConnected() {
   }
 
   // Register extensions last because it will trigger WebKit initialization.
-  thread->RegisterExtension(extensions_v8::LoadTimesExtension::Get());
+  // thread->RegisterExtension(extensions_v8::LoadTimesExtension::Get());
 
   WebKitInitialized();
 }
 
 void CefContentRendererClient::RenderFrameCreated(
     content::RenderFrame* render_frame) {
-  CefRenderFrameObserver* render_frame_observer =
+  /* CefRenderFrameObserver* render_frame_observer =
       new CefRenderFrameObserver(render_frame);
   service_manager::BinderRegistry* registry = render_frame_observer->registry();
 
@@ -456,7 +457,7 @@ void CefContentRendererClient::RenderFrameCreated(
       base::WrapUnique(new extensions::CefPrintRenderFrameHelperDelegate()));
 
   if (extensions::ExtensionsEnabled())
-    extensions_renderer_client_->RenderFrameCreated(render_frame, registry);
+    extensions_renderer_client_->RenderFrameCreated(render_frame, registry); */
 
   const base::CommandLine* command_line =
       base::CommandLine::ForCurrentProcess();
@@ -478,7 +479,8 @@ bool CefContentRendererClient::OverrideCreatePlugin(
     content::RenderFrame* render_frame,
     const blink::WebPluginParams& params,
     blink::WebPlugin** plugin) {
-  std::string orig_mime_type = params.mime_type.Utf8();
+  return false;
+  /* std::string orig_mime_type = params.mime_type.Utf8();
   if (extensions::ExtensionsEnabled() &&
       !extensions_renderer_client_->OverrideCreatePlugin(render_frame,
                                                          params)) {
@@ -493,7 +495,7 @@ bool CefContentRendererClient::OverrideCreatePlugin(
       &plugin_info);
   *plugin = ChromeContentRendererClient::CreatePlugin(render_frame, params,
                                                       *plugin_info);
-  return true;
+  return true; */
 }
 
 bool CefContentRendererClient::ShouldFork(blink::WebLocalFrame* frame,
@@ -510,10 +512,10 @@ bool CefContentRendererClient::ShouldFork(blink::WebLocalFrame* frame,
   if (http_method != "GET")
     return false;
 
-  if (extensions::ExtensionsEnabled()) {
+  /* if (extensions::ExtensionsEnabled()) {
     return extensions::CefExtensionsRendererClient::ShouldFork(
         frame, url, is_initial_navigation, is_server_redirect);
-  }
+  } */
 
   return false;
 }
@@ -525,13 +527,13 @@ void CefContentRendererClient::WillSendRequest(
     const url::Origin* initiator_origin,
     GURL* new_url,
     bool* attach_same_site_cookies) {
-  if (extensions::ExtensionsEnabled()) {
+  /* if (extensions::ExtensionsEnabled()) {
     extensions_renderer_client_->WillSendRequest(frame, transition_type, url,
                                                  initiator_origin, new_url,
                                                  attach_same_site_cookies);
     if (!new_url->is_empty())
       return;
-  }
+  } */
 }
 
 unsigned long long CefContentRendererClient::VisitedLinkHash(
@@ -557,9 +559,10 @@ CefContentRendererClient::CreateBrowserPluginDelegate(
     const content::WebPluginInfo& info,
     const std::string& mime_type,
     const GURL& original_url) {
-  DCHECK(extensions::ExtensionsEnabled());
+  return nullptr;
+  /* DCHECK(extensions::ExtensionsEnabled());
   return extensions::CefExtensionsRendererClient::CreateBrowserPluginDelegate(
-      render_frame, info, mime_type, original_url);
+      render_frame, info, mime_type, original_url); */
 }
 
 void CefContentRendererClient::AddSupportedKeySystems(
@@ -569,20 +572,20 @@ void CefContentRendererClient::AddSupportedKeySystems(
 
 void CefContentRendererClient::RunScriptsAtDocumentStart(
     content::RenderFrame* render_frame) {
-  if (extensions::ExtensionsEnabled())
-    extensions_renderer_client_->RunScriptsAtDocumentStart(render_frame);
+  /* if (extensions::ExtensionsEnabled())
+    extensions_renderer_client_->RunScriptsAtDocumentStart(render_frame); */
 }
 
 void CefContentRendererClient::RunScriptsAtDocumentEnd(
     content::RenderFrame* render_frame) {
-  if (extensions::ExtensionsEnabled())
-    extensions_renderer_client_->RunScriptsAtDocumentEnd(render_frame);
+  /* if (extensions::ExtensionsEnabled())
+    extensions_renderer_client_->RunScriptsAtDocumentEnd(render_frame); */
 }
 
 void CefContentRendererClient::RunScriptsAtDocumentIdle(
     content::RenderFrame* render_frame) {
-  if (extensions::ExtensionsEnabled())
-    extensions_renderer_client_->RunScriptsAtDocumentIdle(render_frame);
+  /* if (extensions::ExtensionsEnabled())
+    extensions_renderer_client_->RunScriptsAtDocumentIdle(render_frame); */
 }
 
 void CefContentRendererClient::DevToolsAgentAttached() {

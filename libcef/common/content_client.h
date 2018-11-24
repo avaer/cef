@@ -15,7 +15,7 @@
 
 #include "base/compiler_specific.h"
 #include "content/public/common/content_client.h"
-#include "content/public/common/pepper_plugin_info.h"
+// #include "content/public/common/pepper_plugin_info.h"
 #include "ui/base/resource/resource_bundle.h"
 #include "url/url_util.h"
 
@@ -31,8 +31,8 @@ class CefContentClient : public content::ContentClient,
   static CefContentClient* Get();
 
   // content::ContentClient methods.
-  void AddPepperPlugins(
-      std::vector<content::PepperPluginInfo>* plugins) override;
+  /* void AddPepperPlugins(
+      std::vector<content::PepperPluginInfo>* plugins) override; */
   void AddContentDecryptionModules(
       std::vector<content::CdmInfo>* cdms,
       std::vector<media::CdmHostFilePath>* cdm_host_file_paths) override;
@@ -101,10 +101,10 @@ class CefContentClient : public content::ContentClient,
   bool pack_loading_disabled() const { return pack_loading_disabled_; }
   void set_allow_pack_file_load(bool val) { allow_pack_file_load_ = val; }
 
-  static void SetPDFEntryFunctions(
+  /* static void SetPDFEntryFunctions(
       content::PepperPluginInfo::GetInterfaceFunc get_interface,
       content::PepperPluginInfo::PPP_InitializeModuleFunc initialize_module,
-      content::PepperPluginInfo::PPP_ShutdownModuleFunc shutdown_module);
+      content::PepperPluginInfo::PPP_ShutdownModuleFunc shutdown_module); */
 
  private:
   // ui::ResourceBundle::Delegate methods.

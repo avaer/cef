@@ -173,6 +173,8 @@
 #include "libcef_dll/ctocpp/write_handler_ctocpp.h"
 #include "libcef_dll/transfer_util.h"
 
+#include <iostream>
+
 // GLOBAL FUNCTIONS - Body may be edited by hand.
 
 CEF_EXPORT int cef_execute_process(const struct _cef_main_args_t* args,
@@ -205,30 +207,44 @@ CEF_EXPORT int cef_initialize(const struct _cef_main_args_t* args,
                               void* windows_sandbox_info) {
   // AUTO-GENERATED CONTENT - DELETE THIS COMMENT BEFORE MODIFYING
 
+  std::cout << "call CefInitialize 1" << std::endl;
+  
   // Verify param: args; type: struct_byref_const
   DCHECK(args);
   if (!args)
     return 0;
+  
+  std::cout << "call CefInitialize 2 " << (bool)settings << std::endl;
   // Verify param: settings; type: struct_byref_const
   DCHECK(settings);
   if (!settings)
     return 0;
+  
+  std::cout << "call CefInitialize 3" << std::endl;
   // Unverified params: application, windows_sandbox_info
 
   // Translate param: args; type: struct_byref_const
   CefMainArgs argsObj;
+  std::cout << "call CefInitialize 4 " << (bool)args << std::endl;
   if (args)
     argsObj.Set(*args, false);
+  std::cout << "call CefInitialize 5" << std::endl;
   // Translate param: settings; type: struct_byref_const
   CefSettings settingsObj;
+  std::cout << "call CefInitialize 6 " << (bool)settings << std::endl;
   if (settings)
     settingsObj.Set(*settings, false);
+  std::cout << "call CefInitialize 7" << std::endl;
 
+  std::cout << "call CefInitialize 8 " << (void *)CefInitialize << std::endl;
+  
   // Execute
   bool _retval =
       CefInitialize(argsObj, settingsObj, CefAppCToCpp::Wrap(application),
                     windows_sandbox_info);
 
+  std::cout << "call CefInitialize 9 " << _retval << std::endl;
+                    
   // Return type: bool
   return _retval;
 }

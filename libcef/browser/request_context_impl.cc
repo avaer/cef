@@ -8,7 +8,7 @@
 #include "libcef/browser/content_browser_client.h"
 #include "libcef/browser/context.h"
 #include "libcef/browser/cookie_manager_impl.h"
-#include "libcef/browser/extensions/extension_system.h"
+// #include "libcef/browser/extensions/extension_system.h"
 #include "libcef/browser/thread_util.h"
 #include "libcef/common/extensions/extensions_util.h"
 #include "libcef/common/task_runner_impl.h"
@@ -512,7 +512,7 @@ void CefRequestContextImpl::LoadExtension(
     const CefString& root_directory,
     CefRefPtr<CefDictionaryValue> manifest,
     CefRefPtr<CefExtensionHandler> handler) {
-  if (!CEF_CURRENTLY_ON_UIT()) {
+  /* if (!CEF_CURRENTLY_ON_UIT()) {
     CEF_POST_TASK(CEF_UIT,
                   base::BindOnce(&CefRequestContextImpl::LoadExtension, this,
                                  root_directory, manifest, handler));
@@ -530,11 +530,11 @@ void CefRequestContextImpl::LoadExtension(
         static_cast<CefDictionaryValueImpl*>(manifest.get());
     GetBrowserContext()->extension_system()->LoadExtension(
         base::WrapUnique(value_impl->CopyValue()), root_directory,
-        false /* builtin */, this, handler);
+        false, this, handler);
   } else {
     GetBrowserContext()->extension_system()->LoadExtension(
-        root_directory, false /* builtin */, this, handler);
-  }
+        root_directory, false, this, handler);
+  } */
 }
 
 bool CefRequestContextImpl::DidLoadExtension(const CefString& extension_id) {
@@ -549,7 +549,8 @@ bool CefRequestContextImpl::HasExtension(const CefString& extension_id) {
 
 bool CefRequestContextImpl::GetExtensions(
     std::vector<CefString>& extension_ids) {
-  extension_ids.clear();
+  return false;
+  /* extension_ids.clear();
 
   if (!CEF_CURRENTLY_ON_UIT()) {
     NOTREACHED() << "called on invalid thread";
@@ -566,12 +567,13 @@ bool CefRequestContextImpl::GetExtensions(
   for (; it != extension_map.end(); ++it)
     extension_ids.push_back(it->second->GetIdentifier());
 
-  return true;
+  return true; */
 }
 
 CefRefPtr<CefExtension> CefRequestContextImpl::GetExtension(
     const CefString& extension_id) {
-  if (!CEF_CURRENTLY_ON_UIT()) {
+  return nullptr;
+  /* if (!CEF_CURRENTLY_ON_UIT()) {
     NOTREACHED() << "called on invalid thread";
     return nullptr;
   }
@@ -579,7 +581,7 @@ CefRefPtr<CefExtension> CefRequestContextImpl::GetExtension(
   if (!extensions::ExtensionsEnabled())
     return nullptr;
 
-  return GetBrowserContext()->extension_system()->GetExtension(extension_id);
+  return GetBrowserContext()->extension_system()->GetExtension(extension_id); */
 }
 
 // static
@@ -744,10 +746,10 @@ void CefRequestContextImpl::ClearSchemeHandlerFactoriesInternal(
 void CefRequestContextImpl::PurgePluginListCacheInternal(
     bool reload_pages,
     CefBrowserContext* browser_context) {
-  CEF_REQUIRE_UIT();
+  /* CEF_REQUIRE_UIT();
   browser_context->OnPurgePluginListCache();
   content::PluginService::GetInstance()->PurgePluginListCache(browser_context,
-                                                              false);
+                                                              false); */
 }
 
 void CefRequestContextImpl::ClearCertificateExceptionsInternal(

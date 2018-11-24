@@ -23,10 +23,10 @@ class CefBrowserMainParts;
 class CefDevToolsDelegate;
 class CefResourceDispatcherHostDelegate;
 
-namespace content {
+/* namespace content {
 class PluginServiceFilter;
 class SiteInstance;
-}  // namespace content
+}  // namespace content */
 
 namespace extensions {
 class Extension;
@@ -114,10 +114,10 @@ class CefContentBrowserClient : public content::ContentBrowserClient {
       content::NavigationHandle* navigation_handle) override;
 
 #if defined(OS_LINUX)
-  void GetAdditionalMappedFilesForChildProcess(
+  /* void GetAdditionalMappedFilesForChildProcess(
       const base::CommandLine& command_line,
       int child_process_id,
-      content::PosixFileDescriptorInfo* mappings) override;
+      content::PosixFileDescriptorInfo* mappings) override; */
 #endif
 
 #if defined(OS_WIN)
@@ -179,7 +179,7 @@ class CefContentBrowserClient : public content::ContentBrowserClient {
 
   CefBrowserMainParts* browser_main_parts_;
 
-  std::unique_ptr<content::PluginServiceFilter> plugin_service_filter_;
+  // std::unique_ptr<content::PluginServiceFilter> plugin_service_filter_;
   std::unique_ptr<CefResourceDispatcherHostDelegate>
       resource_dispatcher_host_delegate_;
 };

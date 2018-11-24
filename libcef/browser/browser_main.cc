@@ -13,13 +13,13 @@
 #include "libcef/browser/content_browser_client.h"
 #include "libcef/browser/context.h"
 #include "libcef/browser/devtools_manager_delegate.h"
-#include "libcef/browser/extensions/extension_system_factory.h"
-#include "libcef/browser/extensions/extensions_browser_client.h"
+// #include "libcef/browser/extensions/extension_system_factory.h"
+// #include "libcef/browser/extensions/extensions_browser_client.h"
 #include "libcef/browser/net/chrome_scheme_handler.h"
 #include "libcef/browser/printing/printing_message_filter.h"
 #include "libcef/browser/thread_util.h"
-#include "libcef/common/extensions/extensions_client.h"
-#include "libcef/common/extensions/extensions_util.h"
+// #include "libcef/common/extensions/extensions_client.h"
+// #include "libcef/common/extensions/extensions_util.h"
 #include "libcef/common/net/net_resource_provider.h"
 
 #include "base/bind.h"
@@ -27,10 +27,10 @@
 #include "base/strings/string_number_conversions.h"
 #include "base/task/post_task.h"
 #include "chrome/browser/chrome_browser_main_extra_parts.h"
-#include "chrome/browser/plugins/plugin_finder.h"
+// #include "chrome/browser/plugins/plugin_finder.h"
 #include "content/public/browser/gpu_data_manager.h"
-#include "extensions/browser/extension_system.h"
-#include "extensions/common/constants.h"
+// #include "extensions/browser/extension_system.h"
+// #include "extensions/common/constants.h"
 #include "net/base/net_module.h"
 #include "services/service_manager/embedder/result_codes.h"
 #include "ui/base/material_design/material_design_controller.h"
@@ -113,10 +113,10 @@ void CefBrowserMainParts::PreMainMessageLoopStart() {
 
 void CefBrowserMainParts::PostMainMessageLoopStart() {
 #if defined(OS_LINUX)
-  printing::PrintingContextLinux::SetCreatePrintDialogFunction(
+  /* printing::PrintingContextLinux::SetCreatePrintDialogFunction(
       &CefPrintDialogLinux::CreatePrintDialog);
   printing::PrintingContextLinux::SetPdfPaperSizeFunction(
-      &CefPrintDialogLinux::GetPdfPaperSize);
+      &CefPrintDialogLinux::GetPdfPaperSize); */
 #endif
 
   for (size_t i = 0; i < chrome_extra_parts_.size(); ++i)
@@ -156,7 +156,7 @@ void CefBrowserMainParts::PreMainMessageLoopRun() {
   // CEF's profile is a BrowserContext.
   PreProfileInit();
 
-  if (extensions::ExtensionsEnabled()) {
+  /* if (extensions::ExtensionsEnabled()) {
     // Initialize extension global objects before creating the global
     // BrowserContext.
     extensions_client_.reset(new extensions::CefExtensionsClient());
@@ -166,13 +166,13 @@ void CefBrowserMainParts::PreMainMessageLoopRun() {
     extensions::ExtensionsBrowserClient::Set(extensions_browser_client_.get());
 
     extensions::CefExtensionSystemFactory::GetInstance();
-  }
+  } */
 
   // Register additional KeyedService factories here. See
   // ChromeBrowserMainExtraPartsProfiles for details.
   cef::EnsureBrowserContextKeyedServiceFactoriesBuilt();
 
-  printing::CefPrintingMessageFilter::EnsureShutdownNotifierFactoryBuilt();
+  // printing::CefPrintingMessageFilter::EnsureShutdownNotifierFactoryBuilt();
 
   background_task_runner_ = base::CreateSingleThreadTaskRunnerWithTraits(
       {base::TaskPriority::BEST_EFFORT,
@@ -198,7 +198,7 @@ void CefBrowserMainParts::PreMainMessageLoopRun() {
   CefDevToolsManagerDelegate::StartHttpHandler(browser_context);
 
   // Triggers initialization of the singleton instance on UI thread.
-  PluginFinder::GetInstance()->Init();
+  // PluginFinder::GetInstance()->Init();
 
   scheme::RegisterWebUIControllerFactory();
 
@@ -224,10 +224,10 @@ void CefBrowserMainParts::PostMainMessageLoopRun() {
 }
 
 void CefBrowserMainParts::PostDestroyThreads() {
-  if (extensions::ExtensionsEnabled()) {
+  /* if (extensions::ExtensionsEnabled()) {
     extensions::ExtensionsBrowserClient::Set(NULL);
     extensions_browser_client_.reset();
-  }
+  } */
 
 #if defined(USE_AURA)
   // Delete the DesktopTestViewsDelegate.

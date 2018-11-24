@@ -12,7 +12,7 @@
 
 #include "include/cef_version.h"
 #include "include/cef_web_plugin.h"
-#include "libcef/browser/extensions/chrome_api_registration.h"
+// #include "libcef/browser/extensions/chrome_api_registration.h"
 #include "libcef/browser/frame_host_impl.h"
 #include "libcef/browser/net/internal_scheme_handler.h"
 #include "libcef/browser/net/url_request_manager.h"
@@ -44,7 +44,7 @@
 #include "net/url_request/url_request.h"
 #include "v8/include/v8.h"
 
-using extensions::api::cef::kSupportedAPIs;
+// using extensions::api::cef::kSupportedAPIs;
 
 namespace scheme {
 
@@ -542,7 +542,7 @@ class Delegate : public InternalHandlerDelegate {
   }
 
   bool OnExtensionsSupport(Action* action) {
-    static const char kDevURL[] = "https://developer.chrome.com/extensions/";
+    // static const char kDevURL[] = "https://developer.chrome.com/extensions/";
 
     std::string html =
         "<html>\n<head><title>Extensions Support</title></head>\n"
@@ -552,7 +552,7 @@ class Delegate : public InternalHandlerDelegate {
         "target=\"new\">issue #1947</a> for development progress.\n<ul>\n";
 
     bool has_top_level_name = false;
-    for (size_t i = 0; kSupportedAPIs[i] != nullptr; ++i) {
+    /* for (size_t i = 0; kSupportedAPIs[i] != nullptr; ++i) {
       const std::string& api_name = kSupportedAPIs[i];
       if (api_name.find("Private") != std::string::npos) {
         // Don't list private APIs.
@@ -579,7 +579,7 @@ class Delegate : public InternalHandlerDelegate {
                 "#method-" + function_name + "\" target=\"new\">" + api_name +
                 "</a></li>\n";
       }
-    }
+    } */
 
     if (has_top_level_name) {
       // End the last top-level API entry.

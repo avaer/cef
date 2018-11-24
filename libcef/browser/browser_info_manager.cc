@@ -8,10 +8,10 @@
 
 #include "libcef/browser/browser_host_impl.h"
 #include "libcef/browser/browser_platform_delegate.h"
-#include "libcef/browser/extensions/browser_extensions_util.h"
+// #include "libcef/browser/extensions/browser_extensions_util.h"
 #include "libcef/browser/thread_util.h"
 #include "libcef/common/cef_messages.h"
-#include "libcef/common/extensions/extensions_util.h"
+// #include "libcef/common/extensions/extensions_util.h"
 
 #include "base/logging.h"
 #include "content/common/view_messages.h"
@@ -22,7 +22,7 @@
 
 namespace {
 
-void TranslatePopupFeatures(const blink::mojom::WindowFeatures& webKitFeatures,
+/* void TranslatePopupFeatures(const blink::mojom::WindowFeatures& webKitFeatures,
                             CefPopupFeatures& features) {
   features.x = static_cast<int>(webKitFeatures.x);
   features.xSet = webKitFeatures.has_x;
@@ -37,7 +37,7 @@ void TranslatePopupFeatures(const blink::mojom::WindowFeatures& webKitFeatures,
   features.statusBarVisible = webKitFeatures.status_bar_visible;
   features.toolBarVisible = webKitFeatures.tool_bar_visible;
   features.scrollbarsVisible = webKitFeatures.scrollbars_visible;
-}
+} */
 
 CefBrowserInfoManager* g_info_manager = nullptr;
 
@@ -119,7 +119,8 @@ bool CefBrowserInfoManager::CanCreateWindow(
     bool user_gesture,
     bool opener_suppressed,
     bool* no_javascript_access) {
-  CEF_REQUIRE_UIT();
+  return false;
+  /* CEF_REQUIRE_UIT();
 
   bool is_guest_view = false;
   CefRefPtr<CefBrowserHostImpl> browser =
@@ -218,7 +219,7 @@ bool CefBrowserInfoManager::CanCreateWindow(
     PushPendingPopup(std::move(pending_popup));
   }
 
-  return allow;
+  return allow; */
 }
 
 void CefBrowserInfoManager::GetCustomWebContentsView(
@@ -474,13 +475,13 @@ scoped_refptr<CefBrowserInfo> CefBrowserInfoManager::GetBrowserInfo(
             render_frame_process_id, render_frame_routing_id)) {
       return browser_info;
     }
-    if (extensions::ExtensionsEnabled() &&
+    /* if (extensions::ExtensionsEnabled() &&
         browser_info->guest_render_id_manager()->is_render_frame_id_match(
             render_frame_process_id, render_frame_routing_id)) {
       if (is_guest_view)
         *is_guest_view = true;
       return browser_info;
-    }
+    } */
   }
 
   return nullptr;

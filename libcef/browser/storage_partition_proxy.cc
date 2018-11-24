@@ -93,7 +93,7 @@ CefStoragePartitionProxy::GetGeneratedCodeCacheContext() {
   return parent_->GetGeneratedCodeCacheContext();
 }
 
-content::HostZoomMap* CefStoragePartitionProxy::GetHostZoomMap() {
+/* content::HostZoomMap* CefStoragePartitionProxy::GetHostZoomMap() {
   return parent_->GetHostZoomMap();
 }
 
@@ -104,7 +104,7 @@ CefStoragePartitionProxy::GetHostZoomLevelContext() {
 
 content::ZoomLevelDelegate* CefStoragePartitionProxy::GetZoomLevelDelegate() {
   return parent_->GetZoomLevelDelegate();
-}
+} */
 
 content::PlatformNotificationContext*
 CefStoragePartitionProxy::GetPlatformNotificationContext() {

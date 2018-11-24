@@ -31,7 +31,7 @@ namespace blink {
 class WebURLLoaderFactory;
 }
 
-namespace extensions {
+/* namespace extensions {
 class CefExtensionsRendererClient;
 class Dispatcher;
 class DispatcherDelegate;
@@ -39,7 +39,7 @@ class ExtensionsClient;
 class ExtensionsGuestViewContainerDispatcher;
 class ExtensionsRendererClient;
 class ResourceRequestPolicy;
-}  // namespace extensions
+}  // namespace extensions */
 
 namespace web_cache {
 class WebCacheImpl;
@@ -186,9 +186,9 @@ class CefContentRendererClient : public content::ContentRendererClient,
 
   std::unique_ptr<ChromePDFPrintClient> pdf_print_client_;
 
-  std::unique_ptr<extensions::ExtensionsClient> extensions_client_;
+  /* std::unique_ptr<extensions::ExtensionsClient> extensions_client_;
   std::unique_ptr<extensions::CefExtensionsRendererClient>
-      extensions_renderer_client_;
+      extensions_renderer_client_; */
 
   int devtools_agent_count_;
   int uncaught_exception_stack_size_;

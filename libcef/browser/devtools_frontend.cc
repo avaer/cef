@@ -199,7 +199,7 @@ CefDevToolsFrontend::~CefDevToolsFrontend() {
 
 void CefDevToolsFrontend::ReadyToCommitNavigation(
     content::NavigationHandle* navigation_handle) {
-  content::RenderFrameHost* frame = navigation_handle->GetRenderFrameHost();
+  /* content::RenderFrameHost* frame = navigation_handle->GetRenderFrameHost();
   if (navigation_handle->IsInMainFrame()) {
     frontend_host_.reset(content::DevToolsFrontendHost::Create(
         frame,
@@ -214,7 +214,7 @@ void CefDevToolsFrontend::ReadyToCommitNavigation(
     return;
   std::string script = base::StringPrintf("%s(\"%s\")", it->second.c_str(),
                                           base::GenerateGUID().c_str());
-  content::DevToolsFrontendHost::SetupExtensionsAPI(frame, script);
+  content::DevToolsFrontendHost::SetupExtensionsAPI(frame, script); */
 }
 
 void CefDevToolsFrontend::DocumentAvailableInMainFrame() {

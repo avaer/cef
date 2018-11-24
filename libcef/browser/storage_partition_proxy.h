@@ -9,6 +9,8 @@
 #include "libcef/browser/net/url_request_context_getter_proxy.h"
 
 #include "content/public/browser/storage_partition.h"
+#include "content/public/browser/host_zoom_map.h"
+#include "content/browser/host_zoom_level_context.h"
 
 // StoragePartition implementation for a particular CefBrowserContextProxy. Life
 // span is controlled by CefBrowserContextProxy. Only accessed on the UI thread.
@@ -41,9 +43,9 @@ class CefStoragePartitionProxy : public content::StoragePartition {
   content::SharedWorkerService* GetSharedWorkerService() override;
   content::CacheStorageContext* GetCacheStorageContext() override;
   content::GeneratedCodeCacheContext* GetGeneratedCodeCacheContext() override;
-  content::HostZoomMap* GetHostZoomMap() override;
+  /* content::HostZoomMap* GetHostZoomMap() override;
   content::HostZoomLevelContext* GetHostZoomLevelContext() override;
-  content::ZoomLevelDelegate* GetZoomLevelDelegate() override;
+  content::ZoomLevelDelegate* GetZoomLevelDelegate() override; */
   content::PlatformNotificationContext* GetPlatformNotificationContext()
       override;
   void ClearDataForOrigin(uint32_t remove_mask,

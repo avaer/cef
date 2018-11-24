@@ -19,6 +19,9 @@
 #elif defined(OS_MACOSX)
 #include "libcef/browser/native/browser_platform_delegate_native_mac.h"
 #include "libcef/browser/osr/browser_platform_delegate_osr_mac.h"
+#elif defined(OS_ANDROID)
+#include "libcef/browser/native/browser_platform_delegate_native_android.h"
+#include "libcef/browser/osr/browser_platform_delegate_osr_android.h"
 #elif defined(OS_LINUX)
 #include "libcef/browser/native/browser_platform_delegate_native_linux.h"
 #include "libcef/browser/osr/browser_platform_delegate_osr_linux.h"
@@ -44,6 +47,8 @@ std::unique_ptr<CefBrowserPlatformDelegateNative> CreateNativeDelegate(
 #elif defined(OS_MACOSX)
   return std::make_unique<CefBrowserPlatformDelegateNativeMac>(
       window_info, background_color);
+#elif defined(OS_ANDROID)
+  return std::make_unique<CefBrowserPlatformDelegateNativeAndroid>(window_info, background_color);
 #elif defined(OS_LINUX)
   return std::make_unique<CefBrowserPlatformDelegateNativeLinux>(
       window_info, background_color);
@@ -58,6 +63,8 @@ std::unique_ptr<CefBrowserPlatformDelegateOsr> CreateOSRDelegate(
 #elif defined(OS_MACOSX)
   return std::make_unique<CefBrowserPlatformDelegateOsrMac>(
       std::move(native_delegate));
+#elif defined(OS_ANDROID)
+  return std::make_unique<CefBrowserPlatformDelegateOsrAndroid>(std::move(native_delegate));
 #elif defined(OS_LINUX)
   return std::make_unique<CefBrowserPlatformDelegateOsrLinux>(
       std::move(native_delegate));
@@ -95,7 +102,7 @@ std::unique_ptr<CefBrowserPlatformDelegate> CefBrowserPlatformDelegate::Create(
     if (is_windowless)
       return CreateOSRDelegate(std::move(native_delegate));
     return std::move(native_delegate);
-  } else if (create_params.extension_host_type ==
+  } /* else if (create_params.extension_host_type ==
              extensions::VIEW_TYPE_EXTENSION_BACKGROUND_PAGE) {
     // Creating a background extension host without a window.
     std::unique_ptr<CefBrowserPlatformDelegateNative> native_delegate =
@@ -103,7 +110,7 @@ std::unique_ptr<CefBrowserPlatformDelegate> CefBrowserPlatformDelegate::Create(
                              use_shared_texture, use_external_begin_frame);
     return std::make_unique<CefBrowserPlatformDelegateBackground>(
         std::move(native_delegate));
-  }
+  } */
 #if defined(USE_AURA)
   else {
     // CefWindowInfo is not used in this case.

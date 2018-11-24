@@ -16,12 +16,12 @@
 #include "libcef/browser/browser_platform_delegate.h"
 #include "libcef/browser/context.h"
 #include "libcef/browser/devtools_manager_delegate.h"
-#include "libcef/browser/extensions/extension_system.h"
+// #include "libcef/browser/extensions/extension_system.h"
 #include "libcef/browser/media_capture_devices_dispatcher.h"
 #include "libcef/browser/net/chrome_scheme_handler.h"
-#include "libcef/browser/plugins/plugin_service_filter.h"
+// #include "libcef/browser/plugins/plugin_service_filter.h"
 #include "libcef/browser/prefs/renderer_prefs.h"
-#include "libcef/browser/printing/printing_message_filter.h"
+// #include "libcef/browser/printing/printing_message_filter.h"
 #include "libcef/browser/resource_dispatcher_host_delegate.h"
 #include "libcef/browser/speech_recognition_manager_delegate.h"
 #include "libcef/browser/ssl_info_impl.h"
@@ -31,7 +31,7 @@
 #include "libcef/common/cef_switches.h"
 #include "libcef/common/command_line_impl.h"
 #include "libcef/common/content_client.h"
-#include "libcef/common/extensions/extensions_util.h"
+// #include "libcef/common/extensions/extensions_util.h"
 #include "libcef/common/net/scheme_registration.h"
 #include "libcef/common/request_impl.h"
 
@@ -43,20 +43,20 @@
 #include "cef/grit/cef_resources.h"
 #include "chrome/browser/browser_process.h"
 #include "chrome/browser/chrome_service.h"
-#include "chrome/browser/plugins/plugin_info_host_impl.h"
+// #include "chrome/browser/plugins/plugin_info_host_impl.h"
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/renderer_host/pepper/chrome_browser_pepper_host_factory.h"
 #include "chrome/common/chrome_switches.h"
 #include "chrome/common/constants.mojom.h"
 #include "chrome/grit/browser_resources.h"
 #include "chrome/grit/generated_resources.h"
-#include "chrome/services/printing/public/mojom/constants.mojom.h"
+// #include "chrome/services/printing/public/mojom/constants.mojom.h"
 #include "components/navigation_interception/intercept_navigation_throttle.h"
 #include "components/navigation_interception/navigation_params.h"
 #include "components/services/pdf_compositor/public/interfaces/pdf_compositor.mojom.h"
 #include "content/browser/frame_host/navigation_handle_impl.h"
 #include "content/browser/frame_host/render_frame_host_impl.h"
-#include "content/browser/plugin_service_impl.h"
+// #include "content/browser/plugin_service_impl.h"
 #include "content/public/browser/browser_context.h"
 #include "content/public/browser/browser_ppapi_host.h"
 #include "content/public/browser/browser_thread.h"
@@ -76,16 +76,16 @@
 #include "content/public/common/service_names.mojom.h"
 #include "content/public/common/storage_quota_params.h"
 #include "content/public/common/web_preferences.h"
-#include "extensions/browser/api/web_request/web_request_api.h"
-#include "extensions/browser/extension_message_filter.h"
-#include "extensions/browser/extension_protocols.h"
-#include "extensions/browser/extension_registry.h"
-#include "extensions/browser/extensions_browser_client.h"
-#include "extensions/browser/guest_view/extensions_guest_view_message_filter.h"
-#include "extensions/browser/guest_view/web_view/web_view_guest.h"
-#include "extensions/browser/io_thread_extension_message_filter.h"
-#include "extensions/common/constants.h"
-#include "extensions/common/switches.h"
+// #include "extensions/browser/api/web_request/web_request_api.h"
+// #include "extensions/browser/extension_message_filter.h"
+// #include "extensions/browser/extension_protocols.h"
+// #include "extensions/browser/extension_registry.h"
+// #include "extensions/browser/extensions_browser_client.h"
+// #include "extensions/browser/guest_view/extensions_guest_view_message_filter.h"
+// #include "extensions/browser/guest_view/web_view/web_view_guest.h"
+// #include "extensions/browser/io_thread_extension_message_filter.h"
+// #include "extensions/common/constants.h"
+// #include "extensions/common/switches.h"
 #include "net/ssl/ssl_cert_request_info.h"
 #include "ppapi/host/ppapi_host.h"
 #include "services/service_manager/embedder/switches.h"
@@ -101,13 +101,13 @@
 
 #if defined(OS_LINUX)
 #include "libcef/common/widevine_loader.h"
-#endif
+// #endif
 
-#if defined(OS_POSIX) && !defined(OS_MACOSX)
+// #if defined(OS_POSIX) && !defined(OS_MACOSX)
 #include "base/debug/leak_annotations.h"
 #include "chrome/common/chrome_paths.h"
-#include "components/crash/content/app/breakpad_linux.h"
-#include "components/crash/content/browser/crash_handler_host_linux.h"
+// #include "components/crash/content/app/breakpad_linux.h"
+// #include "components/crash/content/browser/crash_handler_host_linux.h"
 #include "content/public/common/content_descriptors.h"
 #endif
 
@@ -337,7 +337,7 @@ class CefQuotaPermissionContext : public content::QuotaPermissionContext {
 };
 
 #if defined(OS_POSIX) && !defined(OS_MACOSX)
-breakpad::CrashHandlerHostLinux* CreateCrashHandlerHost(
+/* breakpad::CrashHandlerHostLinux* CreateCrashHandlerHost(
     const std::string& process_type) {
   base::FilePath dumps_path;
   base::PathService::Get(chrome::DIR_CRASH_DUMPS, &dumps_path);
@@ -347,7 +347,7 @@ breakpad::CrashHandlerHostLinux* CreateCrashHandlerHost(
     // CefMainDelegate::InitCrashReporter.
     breakpad::CrashHandlerHostLinux* crash_handler =
         new breakpad::CrashHandlerHostLinux(process_type, dumps_path,
-                                            true /* upload */);
+                                            true);
     crash_handler->StartUploaderThread();
     return crash_handler;
   }
@@ -390,7 +390,7 @@ int GetCrashSignalFD(const base::CommandLine& command_line) {
   }
 
   return -1;
-}
+} */
 #endif  // defined(OS_POSIX) && !defined(OS_MACOSX)
 
 // TODO(cef): We can't currently trust NavigationParams::is_main_frame() because
@@ -450,9 +450,9 @@ bool NavigationOnUIThread(
 }  // namespace
 
 CefContentBrowserClient::CefContentBrowserClient() : browser_main_parts_(NULL) {
-  plugin_service_filter_.reset(new CefPluginServiceFilter);
+  /* plugin_service_filter_.reset(new CefPluginServiceFilter);
   content::PluginServiceImpl::GetInstance()->SetFilter(
-      plugin_service_filter_.get());
+      plugin_service_filter_.get()); */
 }
 
 CefContentBrowserClient::~CefContentBrowserClient() {}
@@ -480,15 +480,15 @@ void CefContentBrowserClient::RenderProcessWillLaunch(
   Profile* profile = Profile::FromBrowserContext(host->GetBrowserContext());
 
   host->AddFilter(new CefBrowserMessageFilter(id));
-  host->AddFilter(new printing::CefPrintingMessageFilter(id, profile));
+  // host->AddFilter(new printing::CefPrintingMessageFilter(id, profile));
 
-  if (extensions::ExtensionsEnabled()) {
+  /* if (extensions::ExtensionsEnabled()) {
     host->AddFilter(new extensions::ExtensionMessageFilter(id, profile));
     host->AddFilter(
         new extensions::IOThreadExtensionMessageFilter(id, profile));
     host->AddFilter(
         new extensions::ExtensionsGuestViewMessageFilter(id, profile));
-  }
+  } */
 
   // If the renderer process crashes then the host may already have
   // CefBrowserInfoManager as an observer. Try to remove it first before adding
@@ -513,7 +513,8 @@ void CefContentBrowserClient::RenderProcessWillLaunch(
 bool CefContentBrowserClient::ShouldUseProcessPerSite(
     content::BrowserContext* browser_context,
     const GURL& effective_url) {
-  if (!extensions::ExtensionsEnabled())
+  return false;
+  /* if (!extensions::ExtensionsEnabled())
     return false;
 
   if (!effective_url.SchemeIs(extensions::kExtensionScheme))
@@ -534,7 +535,7 @@ bool CefContentBrowserClient::ShouldUseProcessPerSite(
   // Hosted apps that have script access to their background page must use
   // process per site, since all instances can make synchronous calls to the
   // background window.  Other extensions should use process per site as well.
-  return true;
+  return true; */
 }
 
 bool CefContentBrowserClient::IsHandledURL(const GURL& url) {
@@ -551,7 +552,8 @@ bool CefContentBrowserClient::IsHandledURL(const GURL& url) {
 
 void CefContentBrowserClient::SiteInstanceGotProcess(
     content::SiteInstance* site_instance) {
-  if (!extensions::ExtensionsEnabled())
+  return;
+  /* if (!extensions::ExtensionsEnabled())
     return;
 
   // If this isn't an extension renderer there's nothing to do.
@@ -570,12 +572,13 @@ void CefContentBrowserClient::SiteInstanceGotProcess(
       CEF_IOT, base::Bind(&extensions::InfoMap::RegisterExtensionProcess,
                           browser_context->extension_system()->info_map(),
                           extension->id(), site_instance->GetProcess()->GetID(),
-                          site_instance->GetId()));
+                          site_instance->GetId())); */
 }
 
 void CefContentBrowserClient::SiteInstanceDeleting(
     content::SiteInstance* site_instance) {
-  if (!extensions::ExtensionsEnabled())
+  return;
+  /* if (!extensions::ExtensionsEnabled())
     return;
 
   // May be NULL during shutdown.
@@ -602,7 +605,7 @@ void CefContentBrowserClient::SiteInstanceDeleting(
       CEF_IOT, base::Bind(&extensions::InfoMap::UnregisterExtensionProcess,
                           browser_context->extension_system()->info_map(),
                           extension->id(), site_instance->GetProcess()->GetID(),
-                          site_instance->GetId()));
+                          site_instance->GetId())); */
 }
 
 void CefContentBrowserClient::RegisterInProcessServices(
@@ -616,10 +619,10 @@ void CefContentBrowserClient::RegisterInProcessServices(
 
 void CefContentBrowserClient::RegisterOutOfProcessServices(
     OutOfProcessServiceMap* services) {
-  (*services)[printing::mojom::kServiceName] =
+  /* (*services)[printing::mojom::kServiceName] =
       base::BindRepeating(&base::ASCIIToUTF16, "PDF Compositor Service");
   (*services)[printing::mojom::kChromePrintingServiceName] =
-      base::BindRepeating(&base::ASCIIToUTF16, "Printing Service");
+      base::BindRepeating(&base::ASCIIToUTF16, "Printing Service"); */
   (*services)[proxy_resolver::mojom::kProxyResolverServiceName] =
       base::BindRepeating(&l10n_util::GetStringUTF16,
                           IDS_UTILITY_PROCESS_PROXY_RESOLVER_NAME);
@@ -648,7 +651,7 @@ std::unique_ptr<base::Value> CefContentBrowserClient::GetServiceManifestOverlay(
 std::vector<content::ContentBrowserClient::ServiceManifestInfo>
 CefContentBrowserClient::GetExtraServiceManifests() {
   return std::vector<ServiceManifestInfo>({
-      {printing::mojom::kServiceName, IDR_PDF_COMPOSITOR_MANIFEST},
+      // {printing::mojom::kServiceName, IDR_PDF_COMPOSITOR_MANIFEST},
       {chrome::mojom::kRendererServiceName,
        IDR_CHROME_RENDERER_SERVICE_MANIFEST},
   });
@@ -706,7 +709,7 @@ void CefContentBrowserClient::AppendExtraCommandLineSwitches(
     command_line->CopySwitchesFrom(*browser_cmd, kSwitchNames,
                                    arraysize(kSwitchNames));
 
-    if (extensions::ExtensionsEnabled()) {
+    /* if (extensions::ExtensionsEnabled()) {
       // Based on ChromeContentBrowserClientExtensionsPart::
       // AppendExtraRendererCommandLineSwitches
       content::RenderProcessHost* process =
@@ -717,7 +720,7 @@ void CefContentBrowserClient::AppendExtraCommandLineSwitches(
                                  ->Contains(process->GetID())) {
         command_line->AppendSwitch(extensions::switches::kExtensionProcess);
       }
-    }
+    } */
   } else {
     // Propagate the following switches to non-renderer command line (along with
     // any associated values) if present in the browser command line.
@@ -963,9 +966,9 @@ std::string CefContentBrowserClient::GetDefaultDownloadName() {
 
 void CefContentBrowserClient::DidCreatePpapiPlugin(
     content::BrowserPpapiHost* browser_host) {
-  browser_host->GetPpapiHost()->AddHostFactoryFilter(
+  /* browser_host->GetPpapiHost()->AddHostFactoryFilter(
       std::unique_ptr<ppapi::host::HostFactory>(
-          new ChromeBrowserPepperHostFactory(browser_host)));
+          new ChromeBrowserPepperHostFactory(browser_host))); */
 }
 
 content::DevToolsManagerDelegate*
@@ -1011,7 +1014,7 @@ CefContentBrowserClient::CreateThrottlesForNavigation(
 }
 
 #if defined(OS_LINUX)
-void CefContentBrowserClient::GetAdditionalMappedFilesForChildProcess(
+/* void CefContentBrowserClient::GetAdditionalMappedFilesForChildProcess(
     const base::CommandLine& command_line,
     int child_process_id,
     content::PosixFileDescriptorInfo* mappings) {
@@ -1019,7 +1022,7 @@ void CefContentBrowserClient::GetAdditionalMappedFilesForChildProcess(
   if (crash_signal_fd >= 0) {
     mappings->Share(service_manager::kCrashDumpSignal, crash_signal_fd);
   }
-}
+} */
 #endif  // defined(OS_LINUX)
 
 #if defined(OS_WIN)
@@ -1048,10 +1051,10 @@ void CefContentBrowserClient::ExposeInterfacesToRenderer(
     service_manager::BinderRegistry* registry,
     blink::AssociatedInterfaceRegistry* associated_registry,
     content::RenderProcessHost* host) {
-  Profile* profile = Profile::FromBrowserContext(host->GetBrowserContext());
+  /* Profile* profile = Profile::FromBrowserContext(host->GetBrowserContext());
   host->GetChannel()->AddAssociatedInterfaceForIOThread(base::Bind(
       &PluginInfoHostImpl::OnPluginInfoHostRequest,
-      base::MakeRefCounted<PluginInfoHostImpl>(host->GetID(), profile)));
+      base::MakeRefCounted<PluginInfoHostImpl>(host->GetID(), profile))); */
 }
 
 std::unique_ptr<net::ClientCertStore>
@@ -1066,7 +1069,8 @@ CefContentBrowserClient::CreateClientCertStore(
 void CefContentBrowserClient::RegisterNonNetworkNavigationURLLoaderFactories(
     int frame_tree_node_id,
     NonNetworkURLLoaderFactoryMap* factories) {
-  if (!extensions::ExtensionsEnabled())
+  return;
+  /* if (!extensions::ExtensionsEnabled())
     return;
 
   content::WebContents* web_contents =
@@ -1075,20 +1079,21 @@ void CefContentBrowserClient::RegisterNonNetworkNavigationURLLoaderFactories(
       extensions::kExtensionScheme,
       extensions::CreateExtensionNavigationURLLoaderFactory(
           web_contents->GetBrowserContext(),
-          !!extensions::WebViewGuest::FromWebContents(web_contents)));
+          !!extensions::WebViewGuest::FromWebContents(web_contents))); */
 }
 
 void CefContentBrowserClient::RegisterNonNetworkSubresourceURLLoaderFactories(
     int render_process_id,
     int render_frame_id,
     NonNetworkURLLoaderFactoryMap* factories) {
-  if (!extensions::ExtensionsEnabled())
+  return;
+  /* if (!extensions::ExtensionsEnabled())
     return;
 
   auto factory = extensions::CreateExtensionURLLoaderFactory(render_process_id,
                                                              render_frame_id);
   if (factory)
-    factories->emplace(extensions::kExtensionScheme, std::move(factory));
+    factories->emplace(extensions::kExtensionScheme, std::move(factory)); */
 }
 
 bool CefContentBrowserClient::WillCreateURLLoaderFactory(
@@ -1098,7 +1103,8 @@ bool CefContentBrowserClient::WillCreateURLLoaderFactory(
     const url::Origin& request_initiator,
     network::mojom::URLLoaderFactoryRequest* factory_request,
     bool* bypass_redirect_checks) {
-  if (!extensions::ExtensionsEnabled())
+  return false;
+  /* if (!extensions::ExtensionsEnabled())
     return false;
 
   auto* web_request_api =
@@ -1108,7 +1114,7 @@ bool CefContentBrowserClient::WillCreateURLLoaderFactory(
       frame, is_navigation, factory_request);
   if (bypass_redirect_checks)
     *bypass_redirect_checks = use_proxy;
-  return use_proxy;
+  return use_proxy; */
 }
 
 bool CefContentBrowserClient::HandleExternalProtocol(
@@ -1164,12 +1170,13 @@ CefContentBrowserClient::user_blocking_task_runner() const {
 
 const extensions::Extension* CefContentBrowserClient::GetExtension(
     content::SiteInstance* site_instance) {
-  extensions::ExtensionRegistry* registry =
+  return nullptr;
+  /* extensions::ExtensionRegistry* registry =
       extensions::ExtensionRegistry::Get(site_instance->GetBrowserContext());
   if (!registry)
     return nullptr;
   return registry->enabled_extensions().GetExtensionOrAppByURL(
-      site_instance->GetSiteURL());
+      site_instance->GetSiteURL()); */
 }
 
 // static

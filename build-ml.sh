@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export GYP_DEFINES=target_arch=arm64
+export GYP_DEFINES="target_arch=arm64 target_os=android"
 export GN_DEFINES="is_official_build=true use_sysroot=true use_allocator=none symbol_level=1 arm_float_abi=hard"
 export PATH=/home/a/code/depot_tools:$PATH
 

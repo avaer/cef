@@ -2,18 +2,20 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CEF_LIBCEF_BROWSER_NATIVE_BROWSER_PLATFORM_DELEGATE_NATIVE_LINUX_H_
-#define CEF_LIBCEF_BROWSER_NATIVE_BROWSER_PLATFORM_DELEGATE_NATIVE_LINUX_H_
+// #error lol 1
+
+#ifndef CEF_LIBCEF_BROWSER_NATIVE_BROWSER_PLATFORM_DELEGATE_NATIVE_ANDROID_H_
+#define CEF_LIBCEF_BROWSER_NATIVE_BROWSER_PLATFORM_DELEGATE_NATIVE_ANDROID_H_
 
 #include "libcef/browser/native/browser_platform_delegate_native.h"
 
 class CefWindowX11;
 
-// Windowed browser implementation for Linux.
-class CefBrowserPlatformDelegateNativeLinux
+// Windowed browser implementation for Android.
+class CefBrowserPlatformDelegateNativeAndroid
     : public CefBrowserPlatformDelegateNative {
  public:
-  CefBrowserPlatformDelegateNativeLinux(const CefWindowInfo& window_info,
+  CefBrowserPlatformDelegateNativeAndroid(const CefWindowInfo& window_info,
                                         SkColor background_color);
 
   // CefBrowserPlatformDelegate methods:
@@ -57,9 +59,9 @@ class CefBrowserPlatformDelegateNativeLinux
 
   // Widget hosting the web contents. It will be deleted automatically when the
   // associated root window is destroyed.
-  views::Widget* window_widget_;
+  // views::Widget* window_widget_;
 
-  CefWindowX11* window_x11_;
+  // CefWindowX11* window_x11_;
 };
 
 #endif  // CEF_LIBCEF_BROWSER_NATIVE_BROWSER_PLATFORM_DELEGATE_NATIVE_LINUX_H_

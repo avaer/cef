@@ -31,7 +31,7 @@
 #include "content/public/browser/web_contents.h"
 #include "content/public/browser/web_contents_delegate.h"
 #include "content/public/browser/web_contents_observer.h"
-#include "extensions/common/view_type.h"
+// #include "extensions/common/view_type.h"
 
 namespace content {
 struct DragEventSourceInfo;
@@ -134,8 +134,8 @@ class CefBrowserHostImpl : public CefBrowserHost,
 
     // Used when explicitly creating the browser as an extension host via
     // ProcessManager::CreateBackgroundHost.
-    const extensions::Extension* extension = nullptr;
-    extensions::ViewType extension_host_type = extensions::VIEW_TYPE_INVALID;
+    // const extensions::Extension* extension = nullptr;
+    // extensions::ViewType extension_host_type = extensions::VIEW_TYPE_INVALID;
   };
 
   // Create a new CefBrowserHostImpl instance.
@@ -367,7 +367,7 @@ class CefBrowserHostImpl : public CefBrowserHost,
 
   // Accessors that must be called on the UI thread.
   content::BrowserContext* GetBrowserContext();
-  extensions::ExtensionHost* extension_host() const { return extension_host_; }
+  // extensions::ExtensionHost* extension_host() const { return extension_host_; }
 
   void OnSetFocus(cef_focus_source_t source);
 
@@ -589,13 +589,13 @@ class CefBrowserHostImpl : public CefBrowserHost,
   bool CreateHostWindow();
 
   // Create/delete the host for extensions.
-  void CreateExtensionHost(const extensions::Extension* extension,
+  /* void CreateExtensionHost(const extensions::Extension* extension,
                            content::BrowserContext* browser_context,
                            content::WebContents* host_contents,
                            const GURL& url,
-                           extensions::ViewType host_type);
-  void DestroyExtensionHost();
-  void OnExtensionHostDeleted();
+                           extensions::ViewType host_type); */
+  // void DestroyExtensionHost();
+  // void OnExtensionHostDeleted();
 
   // Returns true if navigation actions are currently locked.
   bool navigation_locked() const;
@@ -758,8 +758,8 @@ class CefBrowserHostImpl : public CefBrowserHost,
   int find_request_id_counter_ = 0;
 
   // Used when the browser is hosting an extension.
-  extensions::ExtensionHost* extension_host_ = nullptr;
-  CefRefPtr<CefExtension> extension_;
+  // extensions::ExtensionHost* extension_host_ = nullptr;
+  // CefRefPtr<CefExtension> extension_;
   bool is_background_host_ = false;
 
   // Used with auto-resize.

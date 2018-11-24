@@ -11,13 +11,13 @@
 #include "libcef/browser/content_browser_client.h"
 #include "libcef/browser/context.h"
 #include "libcef/browser/download_manager_delegate.h"
-#include "libcef/browser/extensions/extension_system.h"
+// #include "libcef/browser/extensions/extension_system.h"
 #include "libcef/browser/prefs/browser_prefs.h"
 #include "libcef/browser/request_context_impl.h"
 #include "libcef/browser/ssl_host_state_delegate.h"
 #include "libcef/browser/thread_util.h"
 #include "libcef/common/cef_switches.h"
-#include "libcef/common/extensions/extensions_util.h"
+// #include "libcef/common/extensions/extensions_util.h"
 
 #include "base/command_line.h"
 #include "base/files/file_util.h"
@@ -38,8 +38,8 @@
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/download_manager.h"
 #include "content/public/browser/storage_partition.h"
-#include "extensions/browser/extension_protocols.h"
-#include "extensions/common/constants.h"
+// #include "extensions/browser/extension_protocols.h"
+// #include "extensions/common/constants.h"
 #include "net/proxy_resolution/proxy_config_service.h"
 #include "net/proxy_resolution/proxy_resolution_service.h"
 
@@ -229,7 +229,7 @@ CefBrowserContextImpl::~CefBrowserContextImpl() {
 
   // The FontFamilyCache references the ProxyService so delete it before the
   // ProxyService is deleted.
-  SetUserData(&kFontFamilyCacheKey, NULL);
+  // SetUserData(&kFontFamilyCacheKey, NULL);
 
   pref_proxy_config_tracker_->DetachFromPrefService();
 
@@ -326,9 +326,9 @@ void CefBrowserContextImpl::RemoveCefRequestContext(
     CefRequestContextImpl* context) {
   CEF_REQUIRE_UIT();
 
-  if (extensions::ExtensionsEnabled()) {
+  /* if (extensions::ExtensionsEnabled()) {
     extension_system()->OnRequestContextDeleted(context);
-  }
+  } */
 
   request_context_set_.erase(context);
 
@@ -371,7 +371,7 @@ base::FilePath CefBrowserContextImpl::GetPath() const {
   return cache_path_;
 }
 
-std::unique_ptr<content::ZoomLevelDelegate>
+/* std::unique_ptr<content::ZoomLevelDelegate>
 CefBrowserContextImpl::CreateZoomLevelDelegate(
     const base::FilePath& partition_path) {
   if (cache_path_.empty())
@@ -380,7 +380,7 @@ CefBrowserContextImpl::CreateZoomLevelDelegate(
   return base::WrapUnique(new ChromeZoomLevelPrefs(
       GetPrefs(), cache_path_, partition_path,
       zoom::ZoomEventManager::GetForBrowserContext(this)->GetWeakPtr()));
-}
+} */
 
 bool CefBrowserContextImpl::IsOffTheRecord() const {
   // CEF contexts are never flagged as off-the-record. It causes problems
@@ -399,8 +399,9 @@ CefBrowserContextImpl::GetDownloadManagerDelegate() {
 }
 
 content::BrowserPluginGuestManager* CefBrowserContextImpl::GetGuestManager() {
-  DCHECK(extensions::ExtensionsEnabled());
-  return guest_view::GuestViewManager::FromBrowserContext(this);
+  return nullptr;
+  /* DCHECK(extensions::ExtensionsEnabled());
+  return guest_view::GuestViewManager::FromBrowserContext(this); */
 }
 
 storage::SpecialStoragePolicy*
@@ -459,7 +460,7 @@ net::URLRequestContextGetter* CefBrowserContextImpl::CreateRequestContext(
       pref_proxy_config_tracker_->CreateTrackingProxyConfigService(
           std::move(base_service)));
 
-  if (extensions::ExtensionsEnabled()) {
+  /* if (extensions::ExtensionsEnabled()) {
     // Handle only chrome-extension:// requests. CEF does not support
     // chrome-extension-resource:// requests (it does not store shared extension
     // data in its installation directory).
@@ -467,7 +468,7 @@ net::URLRequestContextGetter* CefBrowserContextImpl::CreateRequestContext(
     (*protocol_handlers)[extensions::kExtensionScheme] =
         extensions::CreateExtensionProtocolHandler(IsOffTheRecord(),
                                                    extension_info_map);
-  }
+  } */
 
   url_request_getter_ = new CefURLRequestContextGetterImpl(
       settings_, GetPrefs(), io_thread_runner, protocol_handlers,

@@ -21,7 +21,7 @@ CEF_EXPORT cef_print_settings_t* cef_print_settings_create() {
   // AUTO-GENERATED CONTENT - DELETE THIS COMMENT BEFORE MODIFYING
 
   // Execute
-  CefRefPtr<CefPrintSettings> _retval = CefPrintSettings::Create();
+  CefRefPtr<CefPrintSettings> _retval; // = CefPrintSettings::Create();
 
   // Return type: refptr_same
   return CefPrintSettingsCppToC::Wrap(_retval);

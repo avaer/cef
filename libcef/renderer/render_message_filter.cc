@@ -34,13 +34,14 @@ void CefRenderMessageFilter::OnFilterRemoved() {
 }
 
 bool CefRenderMessageFilter::OnMessageReceived(const IPC::Message& message) {
-  bool handled = true;
+  return false;
+  /* bool handled = true;
   IPC_BEGIN_MESSAGE_MAP(CefRenderMessageFilter, message)
     IPC_MESSAGE_HANDLER(ChromeViewHostMsg_IsCrashReportingEnabled,
                         OnIsCrashReportingEnabled)
     IPC_MESSAGE_UNHANDLED(handled = false)
   IPC_END_MESSAGE_MAP()
-  return handled;
+  return handled; */
 }
 
 // Based on BrowserMessageFilter::Send.

@@ -38,7 +38,10 @@ class cef_api_hash:
         ],
         "linux": [
             "internal/cef_types_linux.h",
-        ]
+        ],
+        "android": [
+            "internal/cef_types_linux.h",
+        ],
     }
 
     self.included_files = []

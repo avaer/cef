@@ -32,7 +32,7 @@
 #include "chrome/common/pepper_flash.h"
 #include "content/public/common/content_constants.h"
 #include "content/public/common/content_switches.h"
-#include "content/public/common/pepper_plugin_info.h"
+// #include "content/public/common/pepper_plugin_info.h"
 #include "content/public/common/user_agent.h"
 #include "ppapi/shared_impl/ppapi_permissions.h"
 #include "third_party/widevine/cdm/buildflags.h"
@@ -49,22 +49,22 @@ CefContentClient* g_content_client = NULL;
 // The following plugin-related methods are from
 // chrome/common/chrome_content_client.cc
 
-const char kPDFPluginExtension[] = "pdf";
+/* const char kPDFPluginExtension[] = "pdf";
 const char kPDFPluginDescription[] = "Portable Document Format";
 const char kPDFPluginOutOfProcessMimeType[] = "application/x-google-chrome-pdf";
 const uint32_t kPDFPluginPermissions =
-    ppapi::PERMISSION_PDF | ppapi::PERMISSION_DEV;
+    ppapi::PERMISSION_PDF | ppapi::PERMISSION_DEV; */
 
-content::PepperPluginInfo::GetInterfaceFunc g_pdf_get_interface;
+/* content::PepperPluginInfo::GetInterfaceFunc g_pdf_get_interface;
 content::PepperPluginInfo::PPP_InitializeModuleFunc g_pdf_initialize_module;
-content::PepperPluginInfo::PPP_ShutdownModuleFunc g_pdf_shutdown_module;
+content::PepperPluginInfo::PPP_ShutdownModuleFunc g_pdf_shutdown_module; */
 
 // Appends the known built-in plugins to the given vector. Some built-in
 // plugins are "internal" which means they are compiled into the Chrome binary,
 // and some are extra shared libraries distributed with the browser (these are
 // not marked internal, aside from being automatically registered, they're just
 // regular plugins).
-void ComputeBuiltInPlugins(std::vector<content::PepperPluginInfo>* plugins) {
+/* void ComputeBuiltInPlugins(std::vector<content::PepperPluginInfo>* plugins) {
   if (extensions::PdfExtensionEnabled()) {
     content::PepperPluginInfo pdf_info;
     pdf_info.is_internal = true;
@@ -83,9 +83,9 @@ void ComputeBuiltInPlugins(std::vector<content::PepperPluginInfo>* plugins) {
     pdf_info.permissions = kPDFPluginPermissions;
     plugins->push_back(pdf_info);
   }
-}
+} */
 
-content::PepperPluginInfo CreatePepperFlashInfo(const base::FilePath& path,
+/* content::PepperPluginInfo CreatePepperFlashInfo(const base::FilePath& path,
                                                 const std::string& version) {
   content::PepperPluginInfo plugin;
 
@@ -119,9 +119,9 @@ content::PepperPluginInfo CreatePepperFlashInfo(const base::FilePath& path,
   plugin.mime_types.push_back(spl_mime_type);
 
   return plugin;
-}
+} */
 
-void AddPepperFlashFromCommandLine(
+/* void AddPepperFlashFromCommandLine(
     std::vector<content::PepperPluginInfo>* plugins) {
   const base::CommandLine::StringType flash_path =
       base::CommandLine::ForCurrentProcess()->GetSwitchValueNative(
@@ -137,9 +137,9 @@ void AddPepperFlashFromCommandLine(
 
   plugins->push_back(
       CreatePepperFlashInfo(base::FilePath(flash_path), flash_version));
-}
+} */
 
-bool GetSystemPepperFlash(content::PepperPluginInfo* plugin) {
+/* bool GetSystemPepperFlash(content::PepperPluginInfo* plugin) {
   base::CommandLine* command_line = base::CommandLine::ForCurrentProcess();
 
   if (!command_line->HasSwitch(switches::kEnableSystemFlash))
@@ -175,8 +175,8 @@ bool GetSystemPepperFlash(content::PepperPluginInfo* plugin) {
     return false;
 
   *plugin = CreatePepperFlashInfo(flash_filename, version.GetString());
-  return true;
-}
+  return true; 
+} */
 
 }  // namespace
 
@@ -200,7 +200,7 @@ CefContentClient* CefContentClient::Get() {
   return g_content_client;
 }
 
-void CefContentClient::AddPepperPlugins(
+/* void CefContentClient::AddPepperPlugins(
     std::vector<content::PepperPluginInfo>* plugins) {
   ComputeBuiltInPlugins(plugins);
   AddPepperFlashFromCommandLine(plugins);
@@ -208,7 +208,7 @@ void CefContentClient::AddPepperPlugins(
   content::PepperPluginInfo plugin;
   if (GetSystemPepperFlash(&plugin))
     plugins->push_back(plugin);
-}
+} */
 
 void CefContentClient::AddContentDecryptionModules(
     std::vector<content::CdmInfo>* cdms,
@@ -329,14 +329,14 @@ bool CefContentClient::HasCustomScheme(const std::string& scheme_name) {
 }
 
 // static
-void CefContentClient::SetPDFEntryFunctions(
+/* void CefContentClient::SetPDFEntryFunctions(
     content::PepperPluginInfo::GetInterfaceFunc get_interface,
     content::PepperPluginInfo::PPP_InitializeModuleFunc initialize_module,
     content::PepperPluginInfo::PPP_ShutdownModuleFunc shutdown_module) {
   g_pdf_get_interface = get_interface;
   g_pdf_initialize_module = initialize_module;
   g_pdf_shutdown_module = shutdown_module;
-}
+} */
 
 base::FilePath CefContentClient::GetPathForResourcePack(
     const base::FilePath& pack_path,

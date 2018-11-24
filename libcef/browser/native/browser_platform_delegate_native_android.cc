@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "libcef/browser/native/browser_platform_delegate_native_linux.h"
+#include "libcef/browser/native/browser_platform_delegate_native_android.h"
 
 #include <sys/sysinfo.h>
 
 #include "libcef/browser/browser_host_impl.h"
 #include "libcef/browser/context.h"
-#include "libcef/browser/native/menu_runner_linux.h"
+#include "libcef/browser/native/menu_runner_android.h"
 #include "libcef/browser/native/window_delegate_view.h"
 #include "libcef/browser/native/window_x11.h"
 #include "libcef/browser/thread_util.h"
@@ -21,10 +21,10 @@
 #include "ui/events/keycodes/dom/dom_key.h"
 #include "ui/events/keycodes/dom/keycode_converter.h"
 #include "ui/events/keycodes/keyboard_code_conversion_x.h"
-#include "ui/events/keycodes/keyboard_code_conversion_xkb.h"
+// #include "ui/events/keycodes/keyboard_code_conversion_xkb.h"
 #include "ui/events/keycodes/keysym_to_unicode.h"
 #include "ui/gfx/font_render_params.h"
-#include "ui/views/widget/desktop_aura/desktop_window_tree_host_x11.h"
+// #include "ui/views/widget/desktop_aura/desktop_window_tree_host_x11.h"
 #include "ui/views/widget/widget.h"
 
 namespace {
@@ -39,18 +39,18 @@ long GetSystemUptime() {
 
 }  // namespace
 
-CefBrowserPlatformDelegateNativeLinux::CefBrowserPlatformDelegateNativeLinux(
+CefBrowserPlatformDelegateNativeAndroid::CefBrowserPlatformDelegateNativeAndroid(
     const CefWindowInfo& window_info,
     SkColor background_color)
     : CefBrowserPlatformDelegateNative(window_info,
                                        background_color,
                                        false,
                                        false),
-      host_window_created_(false),
+      host_window_created_(false)/*,
       window_widget_(nullptr),
-      window_x11_(nullptr) {}
+      window_x11_(nullptr) */ {}
 
-void CefBrowserPlatformDelegateNativeLinux::BrowserDestroyed(
+void CefBrowserPlatformDelegateNativeAndroid::BrowserDestroyed(
     CefBrowserHostImpl* browser) {
   CefBrowserPlatformDelegate::BrowserDestroyed(browser);
 
@@ -60,9 +60,9 @@ void CefBrowserPlatformDelegateNativeLinux::BrowserDestroyed(
   }
 }
 
-bool CefBrowserPlatformDelegateNativeLinux::CreateHostWindow() {
-  DCHECK(!window_x11_);
-  DCHECK(!window_widget_);
+bool CefBrowserPlatformDelegateNativeAndroid::CreateHostWindow() {
+  // DCHECK(!window_x11_);
+  // DCHECK(!window_widget_);
 
   if (window_info_.width == 0)
     window_info_.width = 800;
@@ -74,23 +74,23 @@ bool CefBrowserPlatformDelegateNativeLinux::CreateHostWindow() {
 
   // Create a new window object. It will delete itself when the associated X11
   // window is destroyed.
-  window_x11_ = new CefWindowX11(browser_, window_info_.parent_window, rect);
-  window_info_.window = window_x11_->xwindow();
+  /* window_x11_ = new CefWindowX11(browser_, window_info_.parent_window, rect);
+  window_info_.window = window_x11_->xwindow(); */
 
   host_window_created_ = true;
 
   // Add a reference that will be released in BrowserDestroyed().
   browser_->AddRef();
 
-  CefWindowDelegateView* delegate_view = new CefWindowDelegateView(
+  /* CefWindowDelegateView* delegate_view = new CefWindowDelegateView(
       GetBackgroundColor(), window_x11_->TopLevelAlwaysOnTop());
   delegate_view->Init(window_info_.window, browser_->web_contents(),
                       gfx::Rect(gfx::Point(), rect.size()));
 
   window_widget_ = delegate_view->GetWidget();
-  window_widget_->Show();
+  window_widget_->Show(); */
 
-  window_x11_->Show();
+  // window_x11_->Show();
 
   // As an additional requirement on Linux, we must set the colors for the
   // render widgets in webkit.
@@ -118,12 +118,12 @@ bool CefBrowserPlatformDelegateNativeLinux::CreateHostWindow() {
   return true;
 }
 
-void CefBrowserPlatformDelegateNativeLinux::CloseHostWindow() {
-  if (window_x11_)
-    window_x11_->Close();
+void CefBrowserPlatformDelegateNativeAndroid::CloseHostWindow() {
+  /* if (window_x11_)
+    window_x11_->Close(); */
 }
 
-CefWindowHandle CefBrowserPlatformDelegateNativeLinux::GetHostWindowHandle()
+CefWindowHandle CefBrowserPlatformDelegateNativeAndroid::GetHostWindowHandle()
     const {
   if (windowless_handler_)
     return windowless_handler_->GetParentWindowHandle();
@@ -134,7 +134,7 @@ CefWindowHandle CefBrowserPlatformDelegateNativeLinux::GetHostWindowHandle()
   return window_widget_;
 } */
 
-void CefBrowserPlatformDelegateNativeLinux::SendFocusEvent(bool setFocus) {
+void CefBrowserPlatformDelegateNativeAndroid::SendFocusEvent(bool setFocus) {
   if (!setFocus)
     return;
 
@@ -144,19 +144,21 @@ void CefBrowserPlatformDelegateNativeLinux::SendFocusEvent(bool setFocus) {
     browser_->web_contents()->Focus();
   }
 
-  if (window_x11_) {
+  /* if (window_x11_) {
     // Give native focus to the DesktopNativeWidgetAura for the root window.
     // Needs to be done via the ::Window so that keyboard focus is assigned
     // correctly.
     window_x11_->Focus();
-  }
+  } */
 }
 
-void CefBrowserPlatformDelegateNativeLinux::NotifyMoveOrResizeStarted() {
+void CefBrowserPlatformDelegateNativeAndroid::NotifyMoveOrResizeStarted() {
   // Call the parent method to dismiss any existing popups.
   CefBrowserPlatformDelegate::NotifyMoveOrResizeStarted();
 
-  if (!window_x11_)
+  return;
+
+  /* if (!window_x11_)
     return;
 
   views::DesktopWindowTreeHostX11* tree_host = window_x11_->GetHost();
@@ -172,33 +174,34 @@ void CefBrowserPlatformDelegateNativeLinux::NotifyMoveOrResizeStarted() {
   // popups are displayed in the correct location.
   content::RenderWidgetHostImpl::From(
       browser_->web_contents()->GetRenderViewHost()->GetWidget())
-      ->SendScreenRects();
+      ->SendScreenRects(); */
 }
 
-void CefBrowserPlatformDelegateNativeLinux::SizeTo(int width, int height) {
-  if (window_x11_) {
+void CefBrowserPlatformDelegateNativeAndroid::SizeTo(int width, int height) {
+  /* if (window_x11_) {
     window_x11_->SetBounds(
         gfx::Rect(window_x11_->bounds().origin(), gfx::Size(width, height)));
-  }
+  } */
 }
 
-gfx::Point CefBrowserPlatformDelegateNativeLinux::GetScreenPoint(
+gfx::Point CefBrowserPlatformDelegateNativeAndroid::GetScreenPoint(
     const gfx::Point& view) const {
   if (windowless_handler_)
     return windowless_handler_->GetParentScreenPoint(view);
 
-  if (!window_x11_)
-    return view;
+  /* if (!window_x11_)
+    return view; */
 
   // We can't use aura::Window::GetBoundsInScreen on Linux because it will
   // return bounds from DesktopWindowTreeHostX11 which in our case is relative
   // to the parent window instead of the root window (screen).
-  const gfx::Rect& bounds_in_screen = window_x11_->GetBoundsInScreen();
+  /* const gfx::Rect& bounds_in_screen = window_x11_->GetBoundsInScreen();
   return gfx::Point(bounds_in_screen.x() + view.x(),
-                    bounds_in_screen.y() + view.y());
+                    bounds_in_screen.y() + view.y()); */
+  return gfx::Point(view.x(), view.y());
 }
 
-void CefBrowserPlatformDelegateNativeLinux::ViewText(const std::string& text) {
+void CefBrowserPlatformDelegateNativeAndroid::ViewText(const std::string& text) {
   char buff[] = "/tmp/CEFSourceXXXXXX";
   int fd = mkstemp(buff);
 
@@ -228,16 +231,16 @@ void CefBrowserPlatformDelegateNativeLinux::ViewText(const std::string& text) {
   ALLOW_UNUSED_LOCAL(result);
 }
 
-bool CefBrowserPlatformDelegateNativeLinux::HandleKeyboardEvent(
+bool CefBrowserPlatformDelegateNativeAndroid::HandleKeyboardEvent(
     const content::NativeWebKeyboardEvent& event) {
   // TODO(cef): Is something required here to handle shortcut keys?
   return false;
 }
 
-void CefBrowserPlatformDelegateNativeLinux::HandleExternalProtocol(
+void CefBrowserPlatformDelegateNativeAndroid::HandleExternalProtocol(
     const GURL& url) {}
 
-void CefBrowserPlatformDelegateNativeLinux::TranslateKeyEvent(
+void CefBrowserPlatformDelegateNativeAndroid::TranslateKeyEvent(
     content::NativeWebKeyboardEvent& result,
     const CefKeyEvent& key_event) const {
   result.windows_key_code = key_event.windows_key_code;
@@ -262,11 +265,12 @@ void CefBrowserPlatformDelegateNativeLinux::TranslateKeyEvent(
   // KeyboardEvent.
   result.dom_code = static_cast<int>(
       ui::KeycodeConverter::NativeKeycodeToDomCode(key_event.native_key_code));
-  int keysym = ui::XKeysymForWindowsKeyCode(
+  /* int keysym = ui::XKeysymForWindowsKeyCode(
       static_cast<ui::KeyboardCode>(key_event.windows_key_code),
       !!(key_event.modifiers & EVENTFLAG_SHIFT_DOWN));
   base::char16 ch = ui::GetUnicodeCharacterFromXKeySym(keysym);
-  result.dom_key = static_cast<int>(ui::XKeySymToDomKey(keysym, ch));
+  result.dom_key = static_cast<int>(ui::XKeySymToDomKey(keysym, ch)); */
+  result.dom_key = 0;
 
   result.text[0] = key_event.character;
   result.unmodified_text[0] = key_event.unmodified_character;
@@ -275,7 +279,7 @@ void CefBrowserPlatformDelegateNativeLinux::TranslateKeyEvent(
                       TranslateModifiers(key_event.modifiers));
 }
 
-void CefBrowserPlatformDelegateNativeLinux::TranslateClickEvent(
+void CefBrowserPlatformDelegateNativeAndroid::TranslateClickEvent(
     blink::WebMouseEvent& result,
     const CefMouseEvent& mouse_event,
     CefBrowserHost::MouseButtonType type,
@@ -306,7 +310,7 @@ void CefBrowserPlatformDelegateNativeLinux::TranslateClickEvent(
   result.click_count = clickCount;
 }
 
-void CefBrowserPlatformDelegateNativeLinux::TranslateMoveEvent(
+void CefBrowserPlatformDelegateNativeAndroid::TranslateMoveEvent(
     blink::WebMouseEvent& result,
     const CefMouseEvent& mouse_event,
     bool mouseLeave) const {
@@ -330,7 +334,7 @@ void CefBrowserPlatformDelegateNativeLinux::TranslateMoveEvent(
   result.click_count = 0;
 }
 
-void CefBrowserPlatformDelegateNativeLinux::TranslateWheelEvent(
+void CefBrowserPlatformDelegateNativeAndroid::TranslateWheelEvent(
     blink::WebMouseWheelEvent& result,
     const CefMouseEvent& mouse_event,
     int deltaX,
@@ -357,19 +361,20 @@ void CefBrowserPlatformDelegateNativeLinux::TranslateWheelEvent(
     result.button = blink::WebMouseEvent::Button::kNoButton;
 }
 
-CefEventHandle CefBrowserPlatformDelegateNativeLinux::GetEventHandle(
+CefEventHandle CefBrowserPlatformDelegateNativeAndroid::GetEventHandle(
     const content::NativeWebKeyboardEvent& event) const {
-  if (!event.os_event)
+  return NULL;
+  /* if (!event.os_event)
     return NULL;
-  return const_cast<CefEventHandle>(event.os_event->native_event());
+  return const_cast<CefEventHandle>(event.os_event->native_event()); */
 }
 
 std::unique_ptr<CefMenuRunner>
-CefBrowserPlatformDelegateNativeLinux::CreateMenuRunner() {
-  return base::WrapUnique(new CefMenuRunnerLinux);
+CefBrowserPlatformDelegateNativeAndroid::CreateMenuRunner() {
+  return base::WrapUnique(new CefMenuRunnerAndroid);
 }
 
-void CefBrowserPlatformDelegateNativeLinux::TranslateMouseEvent(
+void CefBrowserPlatformDelegateNativeAndroid::TranslateMouseEvent(
     blink::WebMouseEvent& result,
     const CefMouseEvent& mouse_event) const {
   // position

@@ -8,9 +8,9 @@
 
 #include "libcef/browser/browser_context.h"
 #include "libcef/browser/context.h"
-#include "libcef/browser/extensions/browser_extensions_util.h"
+// #include "libcef/browser/extensions/browser_extensions_util.h"
 #include "libcef/common/cef_switches.h"
-#include "libcef/common/extensions/extensions_util.h"
+// #include "libcef/common/extensions/extensions_util.h"
 
 #include "base/command_line.h"
 #include "base/i18n/character_encoding.h"
@@ -18,7 +18,7 @@
 #include "base/values.h"
 #include "chrome/browser/accessibility/animation_policy_prefs.h"
 #include "chrome/browser/defaults.h"
-#include "chrome/browser/extensions/extension_webkit_preferences.h"
+// #include "chrome/browser/extensions/extension_webkit_preferences.h"
 #include "chrome/browser/font_family_cache.h"
 #include "chrome/browser/ui/prefs/prefs_tab_helper.h"
 #include "chrome/common/chrome_switches.h"
@@ -33,9 +33,9 @@
 #include "content/public/browser/web_contents.h"
 #include "content/public/common/web_preferences.h"
 #include "content/public/common/webrtc_ip_handling_policy.h"
-#include "extensions/browser/extension_registry.h"
-#include "extensions/browser/view_type_utils.h"
-#include "extensions/common/constants.h"
+// #include "extensions/browser/extension_registry.h"
+// #include "extensions/browser/view_type_utils.h"
+// #include "extensions/common/constants.h"
 #include "media/media_buildflags.h"
 
 namespace renderer_prefs {
@@ -65,7 +65,7 @@ void SetDefaultPrefs(content::WebPreferences& web) {
 
 // Chrome preferences.
 // Should match ChromeContentBrowserClient::OverrideWebkitPrefs.
-void SetChromePrefs(CefBrowserContext* profile, content::WebPreferences& web) {
+/* void SetChromePrefs(CefBrowserContext* profile, content::WebPreferences& web) {
   PrefService* prefs = profile->GetPrefs();
 
   // Fill per-script font preferences.
@@ -118,7 +118,8 @@ void SetChromePrefs(CefBrowserContext* profile, content::WebPreferences& web) {
   web.allow_running_insecure_content =
       prefs->GetBoolean(prefs::kWebKitAllowRunningInsecureContent);
 
-  web.password_echo_enabled = browser_defaults::kPasswordEchoEnabled;
+  // web.password_echo_enabled = browser_defaults::kPasswordEchoEnabled;
+  web.password_echo_enabled = false;
 
   web.text_areas_are_resizable =
       prefs->GetBoolean(prefs::kWebKitTextAreasAreResizable);
@@ -151,13 +152,13 @@ void SetChromePrefs(CefBrowserContext* profile, content::WebPreferences& web) {
     web.strict_mixed_content_checking = true;
     web.strict_powerful_feature_restrictions = true;
   }
-}
+} */
 
 // Extension preferences.
 // Should match ChromeContentBrowserClientExtensionsPart::OverrideWebkitPrefs.
 void SetExtensionPrefs(content::RenderViewHost* rvh,
                        content::WebPreferences& web) {
-  if (!extensions::ExtensionsEnabled())
+  /* if (!extensions::ExtensionsEnabled())
     return;
 
   const extensions::ExtensionRegistry* registry =
@@ -182,7 +183,7 @@ void SetExtensionPrefs(content::RenderViewHost* rvh,
   extensions::ViewType view_type = extensions::GetViewType(web_contents);
   const extensions::Extension* extension =
       registry->enabled_extensions().GetByID(site_url.host());
-  extension_webkit_preferences::SetPreferences(extension, view_type, &web);
+  extension_webkit_preferences::SetPreferences(extension, view_type, &web); */
 }
 
 // Helper macro for setting a WebPreferences variable based on the value of a
@@ -194,7 +195,7 @@ void SetExtensionPrefs(content::RenderViewHost* rvh,
     web_var = false;
 
 // Set preferences based on CefBrowserSettings.
-void SetCefPrefs(const CefBrowserSettings& cef, content::WebPreferences& web) {
+/* void SetCefPrefs(const CefBrowserSettings& cef, content::WebPreferences& web) {
   if (cef.standard_font_family.length > 0) {
     web.standard_font_family_map[content::kCommonScript] =
         CefString(&cef.standard_font_family);
@@ -259,7 +260,7 @@ void SetCefPrefs(const CefBrowserSettings& cef, content::WebPreferences& web) {
     web.webgl1_enabled = false;
     web.webgl2_enabled = false;
   }
-}
+} */
 
 void SetString(CommandLinePrefStore* prefs,
                const std::string& key,
@@ -296,7 +297,7 @@ void SetCommandLinePrefDefaults(CommandLinePrefStore* prefs) {
 
 void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
   PrefsTabHelper::RegisterProfilePrefs(registry);
-  RegisterAnimationPolicyPrefs(registry);
+  // RegisterAnimationPolicyPrefs(registry);
 
   // From chrome::RegisterBrowserUserPrefs.
   registry->RegisterBooleanPref(
@@ -318,30 +319,30 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
   registry->RegisterBooleanPref(prefs::kDisable3DAPIs, false);
   registry->RegisterBooleanPref(prefs::kEnableHyperlinkAuditing, true);
 
-  // From Profile::RegisterProfilePrefs.
+  /* // From Profile::RegisterProfilePrefs.
   registry->RegisterDictionaryPref(prefs::kPartitionDefaultZoomLevel);
-  registry->RegisterDictionaryPref(prefs::kPartitionPerHostZoomLevels);
+  registry->RegisterDictionaryPref(prefs::kPartitionPerHostZoomLevels); */
 }
 
 void PopulateWebPreferences(content::RenderViewHost* rvh,
                             content::WebPreferences& web) {
-  CefRefPtr<CefBrowserHostImpl> browser =
-      extensions::GetOwnerBrowserForHost(rvh, NULL);
+  /* CefRefPtr<CefBrowserHostImpl> browser =
+      extensions::GetOwnerBrowserForHost(rvh, NULL); */
 
   // Set defaults for preferences that are not handled by PrefService.
   SetDefaultPrefs(web);
 
-  // Set preferences based on the context's PrefService.
+  /* // Set preferences based on the context's PrefService.
   if (browser) {
     CefBrowserContext* profile = static_cast<CefBrowserContext*>(
         browser->web_contents()->GetBrowserContext());
     SetChromePrefs(profile, web);
-  }
+  } */
 
   // Set preferences based on the extension.
   SetExtensionPrefs(rvh, web);
 
-  // Set preferences based on CefBrowserSettings.
+  /* // Set preferences based on CefBrowserSettings.
   if (browser)
     SetCefPrefs(browser->settings(), web);
 
@@ -353,7 +354,7 @@ void PopulateWebPreferences(content::RenderViewHost* rvh,
     // that the global windowless state is likely to be accurate.
     web.base_background_color =
         CefContext::Get()->GetBackgroundColor(nullptr, STATE_DEFAULT);
-  }
+  } */
 }
 
 }  // namespace renderer_prefs

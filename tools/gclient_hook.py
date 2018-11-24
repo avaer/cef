@@ -124,6 +124,7 @@ for dir, config in configs.items():
   make_dir(out_path, False)
   args_gn_path = os.path.join(out_path, 'args.gn')
   args_gn_contents = GetConfigFileContents(config)
+  print args_gn_contents
   write_file(args_gn_path, args_gn_contents)
 
   # Generate the Ninja config.

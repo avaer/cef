@@ -146,7 +146,7 @@ class CefBrowserContext : public ChromeProfileStub {
       bool in_memory) override;
 
   // Profile methods.
-  ChromeZoomLevelPrefs* GetZoomLevelPrefs() override;
+  // ChromeZoomLevelPrefs* GetZoomLevelPrefs() override;
   scoped_refptr<network::SharedURLLoaderFactory> GetURLLoaderFactory() override;
 
   // Returns a RequestContext associated with this object. If this object is a

@@ -121,7 +121,7 @@ class ChromeBrowserProcessStub : public BrowserProcess,
   std::string locale_;
   std::unique_ptr<printing::PrintJobManager> print_job_manager_;
   std::unique_ptr<ChromeProfileManagerStub> profile_manager_;
-  scoped_refptr<extensions::EventRouterForwarder> event_router_forwarder_;
+  // scoped_refptr<extensions::EventRouterForwarder> event_router_forwarder_;
   std::unique_ptr<net_log::ChromeNetLog> net_log_;
   std::unique_ptr<net_log::NetExportFileWriter> net_export_file_writer_;
 

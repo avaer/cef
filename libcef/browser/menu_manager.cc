@@ -22,12 +22,12 @@
 
 namespace {
 
-CefString GetLabel(int message_id) {
+/* CefString GetLabel(int message_id) {
   base::string16 label =
       CefContentClient::Get()->GetLocalizedString(message_id);
   DCHECK(!label.empty());
   return label;
-}
+} */
 
 const int kInvalidCommandId = -1;
 const cef_event_flags_t kEmptyEventFlags = static_cast<cef_event_flags_t>(0);
@@ -284,7 +284,7 @@ void CefMenuManager::ExecuteCommandCallback(int command_id,
 }
 
 void CefMenuManager::CreateDefaultModel() {
-  if (!params_.custom_items.empty()) {
+  /* if (!params_.custom_items.empty()) {
     // Custom menu items originating from the renderer process. For example,
     // plugin placeholder menu items or Flash menu items.
     for (size_t i = 0; i < params_.custom_items.size(); ++i) {
@@ -369,7 +369,7 @@ void CefMenuManager::CreateDefaultModel() {
       model_->SetEnabled(MENU_ID_BACK, false);
     if (!browser_->CanGoForward())
       model_->SetEnabled(MENU_ID_FORWARD, false);
-  }
+  } */
 }
 
 void CefMenuManager::ExecuteDefaultCommand(int command_id) {

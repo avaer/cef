@@ -8,8 +8,8 @@
 #include <utility>
 
 #include "build/build_config.h"
-#include "chrome/services/printing/printing_service.h"
-#include "chrome/services/printing/public/mojom/constants.mojom.h"
+// #include "chrome/services/printing/printing_service.h"
+// #include "chrome/services/printing/public/mojom/constants.mojom.h"
 #include "components/services/pdf_compositor/public/cpp/pdf_compositor_service_factory.h"
 #include "components/services/pdf_compositor/public/interfaces/pdf_compositor.mojom.h"
 #include "content/public/child/child_thread.h"
@@ -60,7 +60,7 @@ bool CefContentUtilityClient::OnMessageReceived(const IPC::Message& message) {
 }
 
 void CefContentUtilityClient::RegisterServices(StaticServiceMap* services) {
-  service_manager::EmbeddedServiceInfo pdf_compositor_info;
+  /* service_manager::EmbeddedServiceInfo pdf_compositor_info;
   pdf_compositor_info.factory =
       base::Bind(&printing::CreatePdfCompositorService, std::string());
   services->emplace(printing::mojom::kServiceName, pdf_compositor_info);
@@ -71,7 +71,7 @@ void CefContentUtilityClient::RegisterServices(StaticServiceMap* services) {
         base::Bind(&printing::PrintingService::CreateService);
     services->emplace(printing::mojom::kChromePrintingServiceName,
                       printing_info);
-  }
+  } */
 
   service_manager::EmbeddedServiceInfo proxy_resolver_info;
   proxy_resolver_info.task_runner =

@@ -59,8 +59,8 @@ class CefBrowserContextImpl : public CefBrowserContext,
 
   // BrowserContext methods.
   base::FilePath GetPath() const override;
-  std::unique_ptr<content::ZoomLevelDelegate> CreateZoomLevelDelegate(
-      const base::FilePath& partition_path) override;
+  /* std::unique_ptr<content::ZoomLevelDelegate> CreateZoomLevelDelegate(
+      const base::FilePath& partition_path) override; */
   bool IsOffTheRecord() const override;
   content::DownloadManagerDelegate* GetDownloadManagerDelegate() override;
   content::BrowserPluginGuestManager* GetGuestManager() override;

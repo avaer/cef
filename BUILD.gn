@@ -104,7 +104,7 @@ import("//extensions/buildflags/buildflags.gni")
 import("//media/media_options.gni")
 import("//mojo/public/tools/bindings/mojom.gni")
 import("//ppapi/buildflags/buildflags.gni")
-import("//printing/buildflags/buildflags.gni")
+# import("//printing/buildflags/buildflags.gni")
 import("//services/catalog/public/tools/catalog.gni")
 import("//services/service_manager/public/service_manifest.gni")
 import("//third_party/icu/config.gni")
@@ -132,15 +132,14 @@ if (is_win) {
   import("//build/config/win/manifest.gni")
 }
 
-
 #
 # Verify required global arguments configured via `gn args`.
 # Set by GetRequiredArgs() in //cef/tools/gn_args.py.
 #
 
 # Set ENABLE_PRINTING=1 ENABLE_BASIC_PRINTING=1.
-assert(enable_basic_printing)
-assert(!enable_print_preview)
+# assert(enable_basic_printing)
+# assert(!enable_print_preview)
 
 # Enable support for Widevine CDM.
 assert(enable_widevine)
@@ -276,7 +275,7 @@ if (is_win) {
       # Required by chrome_switches.cc
       "//chrome/common:buildflags",
       "//ppapi/buildflags:buildflags",
-      "//printing/buildflags:buildflags",
+      # "//printing/buildflags:buildflags",
       "//ui/base:ui_features",
     ]
   }
@@ -334,50 +333,50 @@ static_library("libcef_static") {
     "libcef/browser/download_item_impl.h",
     "libcef/browser/download_manager_delegate.cc",
     "libcef/browser/download_manager_delegate.h",
-    "libcef/browser/extension_impl.cc",
-    "libcef/browser/extension_impl.h",
-    "libcef/browser/extensions/api/storage/sync_value_store_cache.cc",
-    "libcef/browser/extensions/api/storage/sync_value_store_cache.h",
-    "libcef/browser/extensions/api/tabs/tabs_api.cc",
-    "libcef/browser/extensions/api/tabs/tabs_api.h",
-    "libcef/browser/extensions/browser_extensions_util.cc",
-    "libcef/browser/extensions/browser_extensions_util.h",
-    "libcef/browser/extensions/browser_platform_delegate_background.cc",
-    "libcef/browser/extensions/browser_platform_delegate_background.h",
-    "libcef/browser/extensions/chrome_api_registration.cc",
-    "libcef/browser/extensions/chrome_api_registration.h",
-    "libcef/browser/extensions/component_extension_resource_manager.cc",
-    "libcef/browser/extensions/component_extension_resource_manager.h",
-    "libcef/browser/extensions/extensions_api_client.cc",
-    "libcef/browser/extensions/extensions_api_client.h",
-    "libcef/browser/extensions/extensions_browser_api_provider.cc",
-    "libcef/browser/extensions/extensions_browser_api_provider.h",
-    "libcef/browser/extensions/extensions_browser_client.cc",
-    "libcef/browser/extensions/extensions_browser_client.h",
-    "libcef/browser/extensions/extension_background_host.cc",
-    "libcef/browser/extensions/extension_background_host.h",
-    "libcef/browser/extensions/extension_function_details.cc",
-    "libcef/browser/extensions/extension_function_details.h",
-    "libcef/browser/extensions/extension_host_delegate.cc",
-    "libcef/browser/extensions/extension_host_delegate.h",
-    "libcef/browser/extensions/extension_system.cc",
-    "libcef/browser/extensions/extension_system.h",
-    "libcef/browser/extensions/extension_system_factory.cc",
-    "libcef/browser/extensions/extension_system_factory.h",
-    "libcef/browser/extensions/extension_view_host.cc",
-    "libcef/browser/extensions/extension_view_host.h",
-    "libcef/browser/extensions/extension_web_contents_observer.cc",
-    "libcef/browser/extensions/extension_web_contents_observer.h",
-    "libcef/browser/extensions/mime_handler_view_guest_delegate.cc",
-    "libcef/browser/extensions/mime_handler_view_guest_delegate.h",
-    "libcef/browser/extensions/pdf_extension_util.cc",
-    "libcef/browser/extensions/pdf_extension_util.h",
-    "libcef/browser/extensions/pdf_web_contents_helper_client.cc",
-    "libcef/browser/extensions/pdf_web_contents_helper_client.h",
-    "libcef/browser/extensions/value_store/cef_value_store.cc",
-    "libcef/browser/extensions/value_store/cef_value_store.h",
-    "libcef/browser/extensions/value_store/cef_value_store_factory.cc",
-    "libcef/browser/extensions/value_store/cef_value_store_factory.h",
+    # "libcef/browser/extension_impl.cc",
+    # "libcef/browser/extension_impl.h",
+    # "libcef/browser/extensions/api/storage/sync_value_store_cache.cc",
+    # "libcef/browser/extensions/api/storage/sync_value_store_cache.h",
+    # "libcef/browser/extensions/api/tabs/tabs_api.cc",
+    # "libcef/browser/extensions/api/tabs/tabs_api.h",
+    # "libcef/browser/extensions/browser_extensions_util.cc",
+    # "libcef/browser/extensions/browser_extensions_util.h",
+    # "libcef/browser/extensions/browser_platform_delegate_background.cc",
+    # "libcef/browser/extensions/browser_platform_delegate_background.h",
+    # "libcef/browser/extensions/chrome_api_registration.cc",
+    # "libcef/browser/extensions/chrome_api_registration.h",
+    # "libcef/browser/extensions/component_extension_resource_manager.cc",
+    # "libcef/browser/extensions/component_extension_resource_manager.h",
+    # "libcef/browser/extensions/extensions_api_client.cc",
+    # "libcef/browser/extensions/extensions_api_client.h",
+    # "libcef/browser/extensions/extensions_browser_api_provider.cc",
+    # "libcef/browser/extensions/extensions_browser_api_provider.h",
+    # "libcef/browser/extensions/extensions_browser_client.cc",
+    # "libcef/browser/extensions/extensions_browser_client.h",
+    # "libcef/browser/extensions/extension_background_host.cc",
+    # "libcef/browser/extensions/extension_background_host.h",
+    # "libcef/browser/extensions/extension_function_details.cc",
+    # "libcef/browser/extensions/extension_function_details.h",
+    # "libcef/browser/extensions/extension_host_delegate.cc",
+    # "libcef/browser/extensions/extension_host_delegate.h",
+    # "libcef/browser/extensions/extension_system.cc",
+    # "libcef/browser/extensions/extension_system.h",
+    # "libcef/browser/extensions/extension_system_factory.cc",
+    # "libcef/browser/extensions/extension_system_factory.h",
+    # "libcef/browser/extensions/extension_view_host.cc",
+    # "libcef/browser/extensions/extension_view_host.h",
+    # "libcef/browser/extensions/extension_web_contents_observer.cc",
+    # "libcef/browser/extensions/extension_web_contents_observer.h",
+    # "libcef/browser/extensions/mime_handler_view_guest_delegate.cc",
+    # "libcef/browser/extensions/mime_handler_view_guest_delegate.h",
+    # "libcef/browser/extensions/pdf_extension_util.cc",
+    # "libcef/browser/extensions/pdf_extension_util.h",
+    # "libcef/browser/extensions/pdf_web_contents_helper_client.cc",
+    # "libcef/browser/extensions/pdf_web_contents_helper_client.h",
+    # "libcef/browser/extensions/value_store/cef_value_store.cc",
+    # "libcef/browser/extensions/value_store/cef_value_store.h",
+    # "libcef/browser/extensions/value_store/cef_value_store_factory.cc",
+    # "libcef/browser/extensions/value_store/cef_value_store_factory.h",
     "libcef/browser/file_dialog_runner.h",
     "libcef/browser/file_dialog_manager.cc",
     "libcef/browser/file_dialog_manager.h",
@@ -461,14 +460,14 @@ static_library("libcef_static") {
     "libcef/browser/prefs/pref_store.h",
     "libcef/browser/prefs/renderer_prefs.cc",
     "libcef/browser/prefs/renderer_prefs.h",
-    "libcef/browser/print_settings_impl.cc",
-    "libcef/browser/print_settings_impl.h",
-    "libcef/browser/printing/printing_message_filter.cc",
-    "libcef/browser/printing/printing_message_filter.h",
-    "libcef/browser/printing/print_view_manager.cc",
-    "libcef/browser/printing/print_view_manager.h",
-    "libcef/browser/printing/print_view_manager_base.cc",
-    "libcef/browser/printing/print_view_manager_base.h",
+    # "libcef/browser/print_settings_impl.cc",
+    # "libcef/browser/print_settings_impl.h",
+    # "libcef/browser/printing/printing_message_filter.cc",
+    # "libcef/browser/printing/printing_message_filter.h",
+    # "libcef/browser/printing/print_view_manager.cc",
+    # "libcef/browser/printing/print_view_manager.h",
+    # "libcef/browser/printing/print_view_manager_base.cc",
+    # "libcef/browser/printing/print_view_manager_base.h",
     "libcef/browser/process_util_impl.cc",
     "libcef/browser/resource_context.cc",
     "libcef/browser/resource_context.h",
@@ -522,14 +521,14 @@ static_library("libcef_static") {
     "libcef/common/crash_reporting.h",
     "libcef/common/drag_data_impl.cc",
     "libcef/common/drag_data_impl.h",
-    "libcef/common/extensions/chrome_generated_schemas.cc",
-    "libcef/common/extensions/chrome_generated_schemas.h",
-    "libcef/common/extensions/extensions_api_provider.cc",
-    "libcef/common/extensions/extensions_api_provider.h",
-    "libcef/common/extensions/extensions_client.cc",
-    "libcef/common/extensions/extensions_client.h",
-    "libcef/common/extensions/extensions_util.cc",
-    "libcef/common/extensions/extensions_util.h",
+    # "libcef/common/extensions/chrome_generated_schemas.cc",
+    # "libcef/common/extensions/chrome_generated_schemas.h",
+    # "libcef/common/extensions/extensions_api_provider.cc",
+    # "libcef/common/extensions/extensions_api_provider.h",
+    # "libcef/common/extensions/extensions_client.cc",
+    # "libcef/common/extensions/extensions_client.h",
+    # "libcef/common/extensions/extensions_util.cc",
+    # "libcef/common/extensions/extensions_util.h",
     "libcef/common/file_util_impl.cc",
     "libcef/common/json_impl.cc",
     "libcef/common/main_delegate.cc",
@@ -588,12 +587,12 @@ static_library("libcef_static") {
     "libcef/renderer/dom_document_impl.h",
     "libcef/renderer/dom_node_impl.cc",
     "libcef/renderer/dom_node_impl.h",
-    "libcef/renderer/extensions/extensions_dispatcher_delegate.cc",
-    "libcef/renderer/extensions/extensions_dispatcher_delegate.h",
-    "libcef/renderer/extensions/extensions_renderer_client.cc",
-    "libcef/renderer/extensions/extensions_renderer_client.h",
-    "libcef/renderer/extensions/print_render_frame_helper_delegate.cc",
-    "libcef/renderer/extensions/print_render_frame_helper_delegate.h",
+    # "libcef/renderer/extensions/extensions_dispatcher_delegate.cc",
+    # "libcef/renderer/extensions/extensions_dispatcher_delegate.h",
+    # "libcef/renderer/extensions/extensions_renderer_client.cc",
+    # "libcef/renderer/extensions/extensions_renderer_client.h",
+    # "libcef/renderer/extensions/print_render_frame_helper_delegate.cc",
+    # "libcef/renderer/extensions/print_render_frame_helper_delegate.h",
     "libcef/renderer/frame_impl.cc",
     "libcef/renderer/frame_impl.h",
     "libcef/renderer/render_frame_observer.cc",
@@ -614,8 +613,18 @@ static_library("libcef_static") {
 
     # Part of //chrome/renderer. Not included by that target because CEF builds
     # with enable_print_preview=0.
-    "//chrome/renderer/pepper/chrome_pdf_print_client.cc",
-    "//chrome/renderer/pepper/chrome_pdf_print_client.h",
+    # "//chrome/renderer/pepper/chrome_pdf_print_client.cc",
+    # "//chrome/renderer/pepper/chrome_pdf_print_client.h",
+
+    # "//content/public/app/content_main_delegate.h",
+    # "//content/public/app/content_main_delegate.cc",
+
+    "//content/browser/renderer_host/delegated_frame_host.h",
+    "//content/browser/renderer_host/delegated_frame_host.cc",
+    "//content/browser/compositor/image_transport_factory.h",
+    "//content/browser/compositor/image_transport_factory.cc",
+    "//content/browser/context_factory.cc",
+    "//content/app/content_main.cc",
   ]
 
   configs += [
@@ -648,7 +657,7 @@ static_library("libcef_static") {
     # libcef/common/extensions/api/README.txt for details.
     #"libcef/common/extensions/api",
     #"libcef/common/extensions/api:api_registration",
-    "libcef/common/extensions/api:extensions_features",
+    # "libcef/common/extensions/api:extensions_features",
 
     # Normal build dependencies. Should be sorted alphabetically.
     "//base",
@@ -659,7 +668,7 @@ static_library("libcef_static") {
     "//chrome/child",
     "//chrome/common",
     "//chrome/renderer",
-    "//chrome/services/printing:lib",
+    # "//chrome/services/printing:lib",
     "//chrome/utility",
     "//components/cdm/renderer",
     "//components/certificate_transparency",
@@ -672,13 +681,13 @@ static_library("libcef_static") {
     "//components/keyed_service/core:core",
     "//components/navigation_interception",
     "//components/network_session_configurator/browser",
-    "//components/pdf/browser",
-    "//components/pdf/renderer",
+    # "//components/pdf/browser",
+    # "//components/pdf/renderer",
     "//components/plugins/renderer",
     "//components/pref_registry",
-    "//components/printing/browser",
-    "//components/printing/common",
-    "//components/printing/renderer",
+    # "//components/printing/browser",
+    # "//components/printing/common",
+    # "//components/printing/renderer",
     "//components/safe_browsing/db:test_database_manager",
     "//components/services/pdf_compositor:pdf_compositor_manifest",
     "//components/services/pdf_compositor/public/cpp:factory",
@@ -702,12 +711,12 @@ static_library("libcef_static") {
     "//content/public/utility",
     "//crypto",
     "//device/base",
-    "//extensions/browser",
-    "//extensions/browser:core_api_provider",
-    "//extensions/buildflags",
-    "//extensions/common/api",
-    "//extensions/common:core_api_provider",
-    "//extensions/renderer",
+    # "//extensions/browser",
+    # "//extensions/browser:core_api_provider",
+    # "//extensions/buildflags",
+    # "//extensions/common/api",
+    # "//extensions/common:core_api_provider",
+     # "//extensions/renderer",
     "//gpu",
     "//ipc",
     "//media",
@@ -717,7 +726,7 @@ static_library("libcef_static") {
     "//net:net_with_v8",
     "//pdf",
     "//ppapi/buildflags",
-    "//printing/buildflags",
+    # "//printing/buildflags",
     "//services/network:network_service",
     "//services/network/public/cpp",
     "//services/service_manager/embedder",
@@ -769,8 +778,8 @@ static_library("libcef_static") {
       "libcef/browser/osr/render_widget_host_view_osr_win.cc",
 
       # Part of //chrome/utility.
-      "//chrome/utility/printing_handler.cc",
-      "//chrome/utility/printing_handler.h",
+      # "//chrome/utility/printing_handler.cc",
+      # "//chrome/utility/printing_handler.h",
     ]
 
     deps += [
@@ -789,24 +798,27 @@ static_library("libcef_static") {
     ]
   }
 
-  if (is_linux) {
+  if (is_linux || is_android) {
     sources += gypi_paths2.includes_linux + [
-      "libcef/browser/native/browser_platform_delegate_native_linux.cc",
-      "libcef/browser/native/browser_platform_delegate_native_linux.h",
-      "libcef/browser/native/menu_runner_linux.cc",
-      "libcef/browser/native/menu_runner_linux.h",
-      "libcef/browser/osr/browser_platform_delegate_osr_linux.cc",
-      "libcef/browser/osr/browser_platform_delegate_osr_linux.h",
-      "libcef/browser/osr/render_widget_host_view_osr_linux.cc",
-      "libcef/browser/printing/print_dialog_linux.cc",
-      "libcef/browser/printing/print_dialog_linux.h",
-      "libcef/browser/native/window_x11.cc",
-      "libcef/browser/native/window_x11.h",
+      "libcef/browser/native/browser_platform_delegate_native_android.cc",
+      "libcef/browser/native/browser_platform_delegate_native_android.h",
+      "libcef/browser/native/menu_runner_android.cc",
+      "libcef/browser/native/menu_runner_android.h",
+      "libcef/browser/osr/browser_platform_delegate_osr_android.cc",
+      "libcef/browser/osr/browser_platform_delegate_osr_android.h",
+      "libcef/browser/osr/render_widget_host_view_osr_android.cc",
+      # "libcef/browser/printing/print_dialog_linux.cc",
+      # "libcef/browser/printing/print_dialog_linux.h",
+      # "libcef/browser/native/window_x11.cc",
+      # "libcef/browser/native/window_x11.h",
+
+      # "//chrome/app/chrome_main_delegate.cc",
+      # "//content/public/app/content_main_delegate.cc",
     ]
 
     deps += [
-      "//build/config/freetype",
-      "//third_party/fontconfig",
+      # "//build/config/freetype",
+      # "//third_party/fontconfig",
     ]
   }
 
@@ -1050,7 +1062,7 @@ if (is_mac) {
 cef_packaged_services = [
   "//chrome/app:chrome_manifest",  # For spell checking.
   "//chrome/app:chrome_renderer_manifest",  # For spell checking.
-  "//chrome/services/printing:manifest",
+  # "//chrome/services/printing:manifest",
   "//services/metrics:manifest",
   "//services/proxy_resolver:proxy_resolver_manifest",
 ]
@@ -1097,7 +1109,7 @@ template("cef_pak_scaled") {
       "$root_gen_dir/chrome/renderer_resources_${percent}_percent.pak",
       "$root_gen_dir/components/components_resources_${percent}_percent.pak",
       "$root_gen_dir/content/app/resources/content_resources_${percent}_percent.pak",
-      "$root_gen_dir/extensions/extensions_browser_resources_${percent}_percent.pak",
+      # "$root_gen_dir/extensions/extensions_browser_resources_${percent}_percent.pak",
       "$root_gen_dir/third_party/blink/public/resources/blink_scaled_resources_${percent}_percent.pak",
       "$root_gen_dir/ui/resources/ui_resources_${percent}_percent.pak",
     ]
@@ -1109,7 +1121,7 @@ template("cef_pak_scaled") {
       "//chrome/renderer:resources",
       "//components/resources:components_scaled_resources",
       "//content/app/resources",
-      "//extensions:extensions_browser_resources",
+      # "//extensions:extensions_browser_resources",
       "//third_party/blink/public:scaled_resources",
       "//ui/resources:ui_resources_grd",
     ]
@@ -1157,6 +1169,7 @@ repack("pak_devtools") {
   # listed both here and in the libcef_static target.
   public_deps = [
     "//content/browser/devtools:resources",
+    "//content/browser/devtools:devtools_resources_grit",
   ]
 
   output = "$root_out_dir/devtools_resources.pak"
@@ -1167,9 +1180,9 @@ repack("pak_extensions") {
   # Each input pak file should also have a deps line for completeness.
   # Add associated .h files in the make_pack_header("resources") target.
   sources = [
-    "$root_gen_dir/chrome/component_extension_resources.pak",
-    "$root_gen_dir/extensions/extensions_renderer_resources.pak",
-    "$root_gen_dir/extensions/extensions_resources.pak",
+    # "$root_gen_dir/chrome/component_extension_resources.pak",
+    # "$root_gen_dir/extensions/extensions_renderer_resources.pak",
+    # "$root_gen_dir/extensions/extensions_resources.pak",
     "$root_gen_dir/mojo/public/js/mojo_bindings_resources.pak",
     "$root_gen_dir/ui/resources/webui_resources.pak",
   ]
@@ -1178,9 +1191,9 @@ repack("pak_extensions") {
   # the libcef_static target. Grit deps that generate .cc files must be
   # listed both here and in the libcef_static target.
   public_deps = [
-    "//chrome/browser/resources:component_extension_resources",
-    "//extensions:extensions_renderer_resources",
-    "//extensions:extensions_resources_grd",
+    # "//chrome/browser/resources:component_extension_resources",
+    # "//extensions:extensions_renderer_resources",
+    # "//extensions:extensions_resources_grd",
     "//mojo/public/js:resources",
     "//ui/resources:webui_resources_grd",
   ]
@@ -1297,21 +1310,21 @@ make_pack_header("resources") {
     "$root_gen_dir/cef/grit/cef_resources.h",
     "$root_gen_dir/chrome/grit/browser_resources.h",
     "$root_gen_dir/chrome/grit/common_resources.h",
-    "$root_gen_dir/chrome/grit/component_extension_resources.h",
+    # "$root_gen_dir/chrome/grit/component_extension_resources.h",
     "$root_gen_dir/chrome/grit/net_internals_resources.h",
     "$root_gen_dir/chrome/grit/renderer_resources.h",
     "$root_gen_dir/components/grit/components_resources.h",
     "$root_gen_dir/content/browser/devtools/grit/devtools_resources.h",
     "$root_gen_dir/content/browser/tracing/grit/tracing_resources.h",
     "$root_gen_dir/content/grit/content_resources.h",
-    "$root_gen_dir/extensions/grit/extensions_browser_resources.h",
-    "$root_gen_dir/extensions/grit/extensions_renderer_resources.h",
-    "$root_gen_dir/extensions/grit/extensions_resources.h",
+    # "$root_gen_dir/extensions/grit/extensions_browser_resources.h",
+    # "$root_gen_dir/extensions/grit/extensions_renderer_resources.h",
+    # "$root_gen_dir/extensions/grit/extensions_resources.h",
     "$root_gen_dir/net/grit/net_resources.h",
     "$root_gen_dir/third_party/blink/public/resources/grit/blink_resources.h",
     "$root_gen_dir/ui/resources/grit/ui_resources.h",
     "$root_gen_dir/ui/resources/grit/webui_resources.h",
-    "$root_gen_dir/ui/views/resources/grit/views_resources.h",
+    # "$root_gen_dir/ui/views/resources/grit/views_resources.h",
   ]
 }
 
@@ -1326,7 +1339,7 @@ make_pack_header("strings") {
     "$root_gen_dir/chrome/grit/platform_locale_settings.h",
     "$root_gen_dir/components/strings/grit/components_strings.h",
     "$root_gen_dir/content/app/strings/grit/content_strings.h",
-    "$root_gen_dir/extensions/strings/grit/extensions_strings.h",
+    # "$root_gen_dir/extensions/strings/grit/extensions_strings.h",
     "$root_gen_dir/ui/strings/grit/ui_strings.h",
   ]
 }
@@ -1542,7 +1555,7 @@ if (is_mac) {
       ]
     }
 
-    if (is_linux && !is_debug && use_allocator=="none") {
+    if ((is_linux || is_android) && !is_debug && use_allocator=="none") {
       # Only export necessary symbols from libcef.so.
       # Don't do this in Debug builds because it causes the resulting
       # application to crash.
@@ -1585,7 +1598,7 @@ static_library("libcef2") {
       ]
     }
 
-    if (is_linux && !is_debug && use_allocator=="none") {
+    if ((is_linux || is_android) && !is_debug && use_allocator=="none") {
       # Only export necessary symbols from libcef.so.
       # Don't do this in Debug builds because it causes the resulting
       # application to crash.

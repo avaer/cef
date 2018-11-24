@@ -43,7 +43,7 @@
 #include "components/sync_preferences/pref_service_syncable_factory.h"
 #include "components/update_client/update_client.h"
 #include "content/public/browser/browser_thread.h"
-#include "extensions/browser/extension_prefs.h"
+// #include "extensions/browser/extension_prefs.h"
 #include "extensions/buildflags/buildflags.h"
 #include "ui/base/l10n/l10n_util.h"
 
@@ -147,11 +147,11 @@ std::unique_ptr<PrefService> CreatePrefService(Profile* profile,
   CefMediaCaptureDevicesDispatcher::RegisterPrefs(registry.get());
   CefURLRequestContextGetterImpl::RegisterPrefs(registry.get());
   chrome_browser_net::RegisterPredictionOptionsProfilePrefs(registry.get());
-  DeviceIDFetcher::RegisterProfilePrefs(registry.get());
-  extensions::ExtensionPrefs::RegisterProfilePrefs(registry.get());
+  // DeviceIDFetcher::RegisterProfilePrefs(registry.get());
+  // extensions::ExtensionPrefs::RegisterProfilePrefs(registry.get());
   GoogleURLTracker::RegisterProfilePrefs(registry.get());
   HostContentSettingsMap::RegisterProfilePrefs(registry.get());
-  PluginInfoHostImpl::RegisterUserPrefs(registry.get());
+  // PluginInfoHostImpl::RegisterUserPrefs(registry.get());
   PrefProxyConfigTrackerImpl::RegisterPrefs(registry.get());
   renderer_prefs::RegisterProfilePrefs(registry.get());
   update_client::RegisterPrefs(registry.get());
